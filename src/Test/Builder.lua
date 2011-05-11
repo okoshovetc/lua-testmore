@@ -21,10 +21,15 @@ local m = {}
 local testout = io and io.stdout
 local testerr = io and (io.stderr or io.stdout)
 
+function m.puts (f, str)
+    f:write(str)
+end
+
 local function _print (self, ...)
     local f = self:output()
     if f then
-        f:write(..., "\n")
+        local msg = table.concat({..., "\n"})
+        m.puts(f, msg)
     else
         print(...)
     end
@@ -40,7 +45,7 @@ local function print_comment (f, ...)
         msg = msg:gsub("\n", "\n# ")
         msg = msg:gsub("\n# \n", "\n#\n")
         msg = msg:gsub("\n# $", '')
-        f:write("# ", msg, "\n")
+        m.puts(f, "# " .. msg .. "\n")
     else
         print("# ", ...)
     end
@@ -298,7 +303,7 @@ end
 
 return m
 --
--- Copyright (c) 2009-2010 Francois Perrad
+-- Copyright (c) 2009-2011 Francois Perrad
 --
 -- This library is licensed under the terms of the MIT/X11 license,
 -- like Lua itself.
