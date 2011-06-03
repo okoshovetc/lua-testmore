@@ -2,7 +2,7 @@
 --
 -- lua-TestMore : <http://fperrad.github.com/lua-TestMore/>
 --
--- Copyright (C) 2009, Perrad Francois
+-- Copyright (C) 2009-2011, Perrad Francois
 --
 -- This code is licensed under the terms of the MIT/X11 license,
 -- like Lua itself.
@@ -45,7 +45,7 @@ f:close()
 if arg[-1] == 'luajit' then
     skip("luajit: cannot load Lua bytecode", 1)
 else
-    os.execute "luac -o hello.luac hello.lua"
+    os.execute(lua .. "c -o hello.luac hello.lua")
 
     cmd = lua .. " hello.luac"
     f = io.popen(cmd)
