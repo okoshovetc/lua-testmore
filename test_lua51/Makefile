@@ -1,7 +1,7 @@
 
+LUA = lua
 LUAJIT = luajit
 LLVM_LUA = llvm-lua
-LUA = lua
 LUA_COVER = ../../gh-pages/lua-TestMore/lua-5.1.4/src/lua
 
 LUA_VERSION = $(shell $(LUA) -e "print(_VERSION)")
@@ -10,7 +10,7 @@ ARCHNAME = $(shell perl -MConfig -e "print Config->{archname}")
 INTSIZE = $(shell perl -MConfig -e "print Config->{intsize}")
 
 export LUA_PATH=;;../src/?.lua
-export LUA_INIT=platform = { lua=[[$(LUA)]], osname=[[$(OSNAME)]], intsize=$(INTSIZE) }
+export LUA_INIT=platform = { osname=[[$(OSNAME)]], intsize=$(INTSIZE) }
 
 harness:
 	prove --exec=$(LUA) *.t
@@ -24,7 +24,7 @@ luajit:
 llvm-lua:
 	prove --exec=$(LLVM_LUA) *.t
 
-cover:
+coverage:
 	prove --exec=$(LUA_COVER) *.t
 
 upload_pl = \

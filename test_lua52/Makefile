@@ -1,6 +1,6 @@
 
-LUAJIT = luajit
 LUA = ../../lua-5.2.0-alpha/src/lua
+LUAJIT = luajit
 LUA_COVER = ../../gh-pages/lua-TestMore/lua-5.2.0-alpha/src/lua
 
 LUA_VERSION = $(shell $(LUA) -e "print(_VERSION)")
@@ -9,7 +9,7 @@ ARCHNAME = $(shell perl -MConfig -e "print Config->{archname}")
 INTSIZE = $(shell perl -MConfig -e "print Config->{intsize}")
 
 export LUA_PATH=;;../src/?.lua
-export LUA_INIT=platform = { lua=[[$(LUA)]], osname=[[$(OSNAME)]], intsize=$(INTSIZE), compat=true }
+export LUA_INIT=platform = { osname=[[$(OSNAME)]], intsize=$(INTSIZE), compat=true }
 
 version:
 	@echo $(LUA_VERSION)
