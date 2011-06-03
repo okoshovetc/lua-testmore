@@ -2,7 +2,7 @@
 --
 -- lua-TestMore : <http://fperrad.github.com/lua-TestMore/>
 --
--- Copyright (C) 2009, Perrad Francois
+-- Copyright (C) 2009-2011, Perrad Francois
 --
 -- This code is licensed under the terms of the MIT/X11 license,
 -- like Lua itself.
@@ -53,9 +53,6 @@ m.pass("function package.seeall")
 local m = require 'Test.More'
 m.ok(true, "function require")
 is(m, Test.More)
-is(Test.More._M, Test.More, "_M")
-is(Test.More._NAME, 'Test.More', "_NAME")
-is(Test.More._PACKAGE, 'Test.', "_PACKAGE")
 
 f = io.open('complex.lua', 'w')
 f:write [[
@@ -167,6 +164,9 @@ f:close()
 require 'cplx'
 is(cplx.i.r, 0, "function require & module")
 is(cplx.i.i, 1)
+is(cplx._M, cplx, "_M")
+is(cplx._NAME, 'cplx', "_NAME")
+is(cplx._PACKAGE, '', "_PACKAGE")
 os.remove('cplx.lua') -- clean up
 
 is(mod, nil, "function module & seeall")
