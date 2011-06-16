@@ -31,7 +31,7 @@ See "Programming in Lua", section 21 "The I/O Library".
 
 require 'Test.More'
 
-plan(60)
+plan(62)
 
 like(io.stdin, '^file %(0?[Xx]?%x+%)$', "variable stdin")
 
@@ -85,12 +85,12 @@ os.remove('output.new')
 f = io.popen([[perl -e "print 'standard output'"]])
 is(io.type(f), 'file', "popen (read)")
 is(f:read(), "standard output")
-io.close(f)
+is(io.close(f), true)
 
 f = io.popen([[perl -pe "s/e/a/"]], 'w')
 is(io.type(f), 'file', "popen (write)")
 f:write("# hello\n") -- not tested : hallo
-f:close()
+is(io.close(f), true)
 
 for line in io.lines('file.txt') do
     is(line, "file with text", "function lines(filename)")
