@@ -2,7 +2,7 @@
 --
 -- lua-TestMore : <http://fperrad.github.com/lua-TestMore/>
 --
--- Copyright (C) 2009-2010, Perrad Francois
+-- Copyright (C) 2009-2011, Perrad Francois
 --
 -- This code is licensed under the terms of the MIT/X11 license,
 -- like Lua itself.
@@ -31,7 +31,7 @@ See "Programming in Lua", section 20 "The String Library".
 
 require 'Test.More'
 
-plan(107)
+plan(109)
 
 is(string.byte('ABC'), 65, "function byte")
 is(string.byte('ABC', 2), 66)
@@ -48,6 +48,10 @@ is(s:byte(2), 66, "method s:byte")
 
 is(string.char(65, 66, 67), 'ABC', "function char")
 is(string.char(), '')
+
+error_like(function () string.char(0, 'bad') end,
+           "^[^:]+:%d+: bad argument #2 to 'char' %(number expected, got string%)",
+           "function char (bad arg)")
 
 if arg[-1] == 'luajit' then
     skip("LuaJIT intentional. Cannot dump functions.", 2)
@@ -259,6 +263,7 @@ is(string.rep('ab', 3), 'ababab', "function rep")
 is(string.rep('ab', 0), '')
 is(string.rep('ab', -1), '')
 is(string.rep('', 5), '')
+is(string.rep('ab', 3, ','), 'ab,ab,ab', "with sep")
 
 is(string.reverse('abcde'), 'edcba', "function reverse")
 is(string.reverse('abcd'), 'dcba')

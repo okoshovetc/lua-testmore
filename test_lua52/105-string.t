@@ -2,7 +2,7 @@
 --
 -- lua-TestMore : <http://fperrad.github.com/lua-TestMore/>
 --
--- Copyright (C) 2009, Perrad Francois
+-- Copyright (C) 2009-2011, Perrad Francois
 --
 -- This code is licensed under the terms of the MIT/X11 license,
 -- like Lua itself.
@@ -24,7 +24,7 @@
 
 require 'Test.More'
 
-plan(51)
+plan(52)
 
 is(- '1', -1, "-'1'")
 
@@ -168,8 +168,13 @@ error_like(function () return '1' > 0 end,
            "^[^:]+:%d+: attempt to compare %w+ with %w+",
            "'1' >== 0")
 
-a = 'text'
-is(a[1], nil, "index")
+error_like(function () a = 'text'; return a[1]; end,
+           "^[^:]+:%d+: no field '1' in strings",
+           "index")
+
+error_like(function () a = 'text'; return a[{}]; end,
+           "^[^:]+:%d+: no such field in strings",
+           "index")
 
 error_like(function () a = 'text'; a[1] = 1; end,
            "^[^:]+:%d+: attempt to index",

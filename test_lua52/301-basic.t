@@ -2,7 +2,7 @@
 --
 -- lua-TestMore : <http://fperrad.github.com/lua-TestMore/>
 --
--- Copyright (C) 2009-2010, Perrad Francois
+-- Copyright (C) 2009-2011, Perrad Francois
 --
 -- This code is licensed under the terms of the MIT/X11 license,
 -- like Lua itself.
@@ -29,7 +29,7 @@ L<http://www.lua.org/manual/5.2/manual.html#6.1>.
 
 require 'Test.More'
 
-plan(153)
+plan(149)
 
 if arg[-1] == 'luajit' then
     like(_VERSION, '^Lua 5%.1', "variable _VERSION")
@@ -121,7 +121,7 @@ if arg[-1] == 'luajit' then
     todo("LuaJIT intentional. getfenv", 1)
 end
 error_like(function () getfenv() end,
-           "^[^:]+:%d+: getfenv/setfenv deprecated",
+           "^[^:]+:%d+: deprecated function",
            "function getfenv (deprecated)")
 
 a = {'a','b','c'}
@@ -185,19 +185,6 @@ f, msg = load([[?syntax error?]], "errorchunk")
 is(f, nil, "function load(syntax error)")
 like(msg, "^%[string \"errorchunk\"%]:%d+:")
 
-if arg[-1] == 'luajit' then
-    skip("LuaJIT intentional. loadin", 2)
-else
-    f = loadin(_G, [[
-function baz (x)
-    return x
-end
-]])
-    is(baz, nil, "function load")
-    f()
-    is(baz('ok'), 'ok')
-end
-
 f = io.open('foo.lua', 'w')
 f:write[[
 function foo (x)
@@ -241,16 +228,6 @@ is(g(), 1)
 f, msg = loadstring([[?syntax error?]])
 is(f, nil, "function loadstring (syntax error)")
 like(msg, '^%[string "%?syntax error%?"%]:%d+:')
-
-a = newproxy(true)
-type_ok(a, 'userdata', "newproxy")
-type_ok(getmetatable(a), 'table')
-b = newproxy(a)
-type_ok(b, 'userdata', "newproxy")
-is(getmetatable(a), getmetatable(b))
-c = newproxy(false)
-type_ok(c, 'userdata', "newproxy")
-is(getmetatable(c), nil)
 
 t = {'a','b','c'}
 a = next(t, nil)
@@ -321,6 +298,12 @@ is(rawequal(t, 2), false)
 is(rawequal(print, format), false)
 is(rawequal(print, 2), false)
 
+is(rawlen("text"), 4, "function rawlen (string)")
+is(rawlen({ 'a', 'b', 'c'}), 3, "function rawlen (table)")
+error_like(function () a = rawlen(true) end,
+           "^[^:]+:%d+: bad argument #1 to 'rawlen' %(table or string expected%)",
+           "function rawlen (bad arg)")
+
 t = {a = 'letter a', b = 'letter b'}
 is(rawget(t, 'a'), 'letter a', "function rawget")
 
@@ -342,7 +325,7 @@ if arg[-1] == 'luajit' then
     todo("LuaJIT intentional. setfenv", 1)
 end
 error_like(function () setfenv() end,
-           "^[^:]+:%d+: getfenv/setfenv deprecated",
+           "^[^:]+:%d+: deprecated function",
            "function setfenv (deprecated)")
 
 is(type("Hello world"), 'string', "function type")
@@ -410,9 +393,15 @@ if arg[-1] == 'luajit' then
     error_like(function () xpcall(assert, nil) end,
                "bad argument #2 to 'xpcall' %(function expected, got nil%)",
                "function xpcall")
+    error_like(function () xpcall(assert) end,
+               "bad argument #2 to 'xpcall' %(function expected, got no value%)",
+               "function xpcall")
     diag("LuaJIT intentional. xpcall")
 else
     is(xpcall(assert, nil), false, "function xpcall")
+    error_like(function () xpcall(assert) end,
+               "^[^:]+:%d+: bad argument #2 to 'xpcall' %(value expected%)",
+               "function xpcall (no arg)")
 end
 
 function backtrace ()

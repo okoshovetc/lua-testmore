@@ -1,7 +1,7 @@
 
-LUA = ../../lua-5.2.0-alpha/src/lua
+LUA = ../../lua-5.2.0-beta-rc1/src/lua
 LUAJIT = luajit
-LUA_COVER = ../../gh-pages/lua-TestMore/lua-5.2.0-alpha/src/lua
+LUA_COVER = ../../gh-pages/lua-TestMore/lua-5.2.0-beta/src/lua
 
 LUA_VERSION = $(shell $(LUA) -e "print(_VERSION)")
 OSNAME = $(shell perl -MConfig -e "print Config->{osname}")

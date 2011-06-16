@@ -2,7 +2,7 @@
 --
 -- lua-TestMore : <http://fperrad.github.com/lua-TestMore/>
 --
--- Copyright (C) 2009-2010, Perrad Francois
+-- Copyright (C) 2009-2011, Perrad Francois
 --
 -- This code is licensed under the terms of the MIT/X11 license,
 -- like Lua itself.
@@ -29,13 +29,15 @@ See "Programming in Lua", section 13 "Metatables and Metamethods".
 
 require 'Test.More'
 
-plan(90)
+plan(91)
 
 t = {}
 is(getmetatable(t), nil, "metatable")
 t1 = {}
 is(setmetatable(t, t1), t)
 is(getmetatable(t), t1)
+error_like(function () setmetatable(t, true) end,
+           "^[^:]+:%d+: bad argument #2 to 'setmetatable' %(nil or table expected%)")
 
 mt = {}
 mt.__metatable = "not your business"

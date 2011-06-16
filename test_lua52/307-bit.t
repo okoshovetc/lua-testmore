@@ -2,7 +2,7 @@
 --
 -- lua-TestMore : <http://fperrad.github.com/lua-TestMore/>
 --
--- Copyright (C) 2010, Perrad Francois
+-- Copyright (C) 2010-2011, Perrad Francois
 --
 -- This code is licensed under the terms of the MIT/X11 license,
 -- like Lua itself.
@@ -33,7 +33,7 @@ if arg[-1] == 'luajit' then
     skip_all("LuaJIT. bit32")
 end
 
-plan(11)
+plan(13)
 
 is(bit32.band(0x01, 0x03, 0x07), 0x01, "function band")
 
@@ -55,6 +55,10 @@ is(bit32.arshift(0x06, 1), 0x03, "function arshift")
 is(bit32.lshift(0x03, 2), 0x0C, "function lshift")
 
 is(bit32.rshift(0x06, 1), 0x03, "function rshift")
+
+is(bit32.extract(0xFFFF, 3, 3), 0x07, "function extract")
+
+is(bit32.replace(0x0000, 0xFFFF, 3, 3), 0x38, "function replace")
 
 -- Local Variables:
 --   mode: lua

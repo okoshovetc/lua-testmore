@@ -2,7 +2,7 @@
 --
 -- lua-TestMore : <http://fperrad.github.com/lua-TestMore/>
 --
--- Copyright (C) 2010, Perrad Francois
+-- Copyright (C) 2010-2011, Perrad Francois
 --
 -- This code is licensed under the terms of the MIT/X11 license,
 -- like Lua itself.
@@ -44,10 +44,14 @@ function f()
     print "after"
 end
 ]]
-like(msg, "^[^:]+:%d+: no loop to break", "orphan break")
+if arg[-1] == 'luajit' then
+    like(msg, "^[^:]+:%d+: no loop to break", "orphan break")
+else
+    like(msg, "^[^:]+:%d+: <break> at line 5 not inside a loop", "orphan break")
+end
 
---[[ no last ]]
-f, msg = loadstring [[
+--[[ break anywhere ]]
+lives_ok( [[
 function f()
     print "before"
     while true do
@@ -57,8 +61,7 @@ function f()
     end
     print "after"
 end
-]]
-like(msg, "^[^:]+:%d+: 'end' expected %(to close", "no last")
+]], "break anywhere")
 
 -- Local Variables:
 --   mode: lua

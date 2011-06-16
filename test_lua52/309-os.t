@@ -2,7 +2,7 @@
 --
 -- lua-TestMore : <http://fperrad.github.com/lua-TestMore/>
 --
--- Copyright (C) 2009-2010, Perrad Francois
+-- Copyright (C) 2009-2011, Perrad Francois
 --
 -- This code is licensed under the terms of the MIT/X11 license,
 -- like Lua itself.
@@ -31,7 +31,7 @@ See "Programming in Lua", section 22 "The Operating System Library".
 
 require 'Test.More'
 
-plan(42)
+plan(51)
 
 local lua = (platform and platform.lua) or arg[-1]
 
@@ -66,24 +66,22 @@ is(os.difftime(1234, 1200), 34, "function difftime")
 is(os.difftime(1234), 1234)
 
 r = os.execute()
-is(r, 1, "function execute")
+is(r, true, "function execute")
 
 cmd = lua .. [[ -e "print '# hello from external Lua'; os.exit(2)"]]
-if platform and platform.osname == 'MSWin32' then
-    is(os.execute(cmd), 2, "function execute & exit")
-else
-    is(os.execute(cmd), 512, "function execute & exit")
-end
+r, s, n = os.execute(cmd)
+is(r, nil)
+is(s, 'exit', "function execute & exit")
+is(n, 2, "exit value")
 
 cmd = lua .. [[ -e "print '# hello from external Lua'; os.exit(false)"]]
-if platform and platform.osname == 'MSWin32' then
-    is(os.execute(cmd), 1, "function execute & exit")
-else
-    is(os.execute(cmd), 256, "function execute & exit")
-end
+r, s, n = os.execute(cmd)
+is(r, nil)
+is(s, 'exit', "function execute & exit")
+is(n, 1, "exit value")
 
-cmd = lua .. [[ -e "print '# hello from external Lua'; os.exit(true)"]]
-is(os.execute(cmd), 0, "function execute & exit")
+cmd = lua .. [[ -e "print '# hello from external Lua'; os.exit(true, true)"]]
+is(os.execute(cmd), true, "function execute & exit")
 
 cmd = lua .. [[ -e "print 'reached'; os.exit(); print 'not reached';"]]
 f = io.popen(cmd)
@@ -93,7 +91,19 @@ code = f:close()
 if arg[-1] == 'luajit' then
     todo("LuaJIT TODO. pipe exit code.", 1)
 end
-is(code, 0, "exit code")
+is(code, true, "exit code")
+
+cmd = lua .. [[ -e "print 'reached'; os.exit(3); print 'not reached';"]]
+f = io.popen(cmd)
+is(f:read'*l', 'reached', "function exit")
+is(f:read'*l', nil)
+r, s, n = f:close()
+if arg[-1] == 'luajit' then
+    todo("LuaJIT TODO. pipe exit code.", 3)
+end
+is(r, nil)
+is(s, 'exit', "exit code")
+is(n, 3, "exit value")
 
 is(os.getenv('__IMPROBABLE__'), nil, "function getenv")
 

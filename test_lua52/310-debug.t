@@ -2,7 +2,7 @@
 --
 -- lua-TestMore : <http://fperrad.github.com/lua-TestMore/>
 --
--- Copyright (C) 2009-2010, Perrad Francois
+-- Copyright (C) 2009-2011, Perrad Francois
 --
 -- This code is licensed under the terms of the MIT/X11 license,
 -- like Lua itself.
@@ -31,7 +31,7 @@ See "Programming in Lua", section 23 "The Debug Library".
 
 require 'Test.More'
 
-plan(38)
+plan(39)
 
 debug = require 'debug'
 
@@ -115,8 +115,11 @@ error_like(function () debug.setlocal(42, 1, true) end,
 
 t = {}
 t1 = {}
-is(debug.setmetatable(t, t1), true, "function setmetatable")
+is(debug.setmetatable(t, t1), t, "function setmetatable")
 is(getmetatable(t), t1)
+
+error_like(function () debug.setmetatable(t, true) end,
+           "^[^:]+:%d+: bad argument #2 to 'setmetatable' %(nil or table expected%)")
 
 local name = debug.setupvalue(plan, 1, require 'Test.Builder':new())
 type_ok(name, 'string', "function setupvalue")
