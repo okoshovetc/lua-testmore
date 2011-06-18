@@ -4,6 +4,9 @@
 --
 
 local loadstring = loadstring
+if _VERSION == "Lua 5.2" then
+    loadstring = load
+end
 local pairs = pairs
 local pcall = pcall
 local require = require
