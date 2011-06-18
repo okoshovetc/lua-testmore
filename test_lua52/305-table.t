@@ -109,7 +109,7 @@ or (arg[-1] == 'luajit') then
     is(table.maxn(a), 10000)
 else
     error_like(function () table.maxn() end,
-               "^[^:]+:%d+: function 'maxn' is deprecated",
+               "^[^:]+:%d+: deprecated function",
                "function maxn (deprecated)")
     skip("module (deprecated)", 3)
 end

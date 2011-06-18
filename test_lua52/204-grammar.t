@@ -30,11 +30,11 @@ require 'Test.More'
 plan(3)
 
 --[[ empty statement ]]
-f, msg = loadstring [[; a = 1]]
+f, msg = load [[; a = 1]]
 type_ok(f, 'function', "empty statement")
 
 --[[ orphan break ]]
-f, msg = loadstring [[
+f, msg = load [[
 function f()
     print "before"
     do

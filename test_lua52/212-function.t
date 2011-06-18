@@ -208,7 +208,7 @@ is(z, nil)
 
 
 --[[ invalid var args ]]
-f, msg = loadstring [[
+f, msg = load [[
 function f ()
     print(...)
 end

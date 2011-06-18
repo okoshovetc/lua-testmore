@@ -164,7 +164,7 @@ is(string.gsub("hello world", "(%w+)", "%1 %1"), "hello hello world world", "fun
 is(string.gsub("hello world", "%w+", "%0 %0", 1), "hello hello world")
 is(string.gsub("hello world from Lua", "(%w+)%s*(%w+)", "%2 %1"), "world hello Lua from")
 is(string.gsub("home = $HOME, user = $USER", "%$(%w+)", string.reverse), "home = EMOH, user = RESU")
-is(string.gsub("4+5 = $return 4+5$", "%$(.-)%$", function (s) return loadstring(s)() end), "4+5 = 9")
+is(string.gsub("4+5 = $return 4+5$", "%$(.-)%$", function (s) return load(s)() end), "4+5 = 9")
 local t = {name='lua', version='5.1'}
 is(string.gsub("$name-$version.tar.gz", "%$(%w+)", t), "lua-5.1.tar.gz")
 

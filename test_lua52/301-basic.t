@@ -29,7 +29,7 @@ L<http://www.lua.org/manual/5.2/manual.html#6.1>.
 
 require 'Test.More'
 
-plan(149)
+plan(150)
 
 if arg[-1] == 'luajit' then
     like(_VERSION, '^Lua 5%.1', "variable _VERSION")
@@ -210,6 +210,16 @@ f, msg = loadfile('foo.lua')
 is(f, nil, "function loadfile (syntax error)")
 like(msg, '^foo%.lua:%d+:')
 os.remove('foo.lua') -- clean up
+
+if (platform and platform.compat)
+or (arg[-1] == 'luajit') then
+    ok(loadstring[[i = i + 1]], "function loadstring")
+else
+    error_like(function () loadstring[[i = i + 1]] end,
+               "^[^:]+:%d+: deprecated function",
+               "function loadstring (deprecated)")
+    loadstring = load
+end
 
 f = loadstring([[i = i + 1]])
 i = 0

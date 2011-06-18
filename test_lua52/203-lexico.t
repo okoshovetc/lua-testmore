@@ -46,30 +46,30 @@ is(string.byte("\\"), 92)
 
 is(string.len("A\0B"), 3)
 
-f, msg = loadstring [[a = "A\300"]]
+f, msg = load [[a = "A\300"]]
 like(msg, "^[^:]+:%d+: .- escape .- near")
 
-f, msg = loadstring [[a = "A\xyz"]]
+f, msg = load [[a = "A\xyz"]]
 like(msg, "^[^:]+:%d+: .- near")
 
-f, msg = loadstring [[a = " unfinished string ]]
+f, msg = load [[a = " unfinished string ]]
 like(msg, "^[^:]+:%d+: unfinished string near")
 
-f, msg = loadstring [[a = " unfinished string
+f, msg = load [[a = " unfinished string
 ]]
 like(msg, "^[^:]+:%d+: unfinished string near")
 
-f, msg = loadstring [[a = " unfinished string \
+f, msg = load [[a = " unfinished string \
 ]]
 like(msg, "^[^:]+:%d+: unfinished string near")
 
-f, msg = loadstring [[a = " unfinished string \]]
+f, msg = load [[a = " unfinished string \]]
 like(msg, "^[^:]+:%d+: unfinished string near")
 
-f, msg = loadstring "a = [[ unfinished long string "
+f, msg = load "a = [[ unfinished long string "
 like(msg, "^[^:]+:%d+: unfinished long string near")
 
-f, msg = loadstring "a = [== invalid long string delimiter "
+f, msg = load "a = [== invalid long string delimiter "
 like(msg, "^[^:]+:%d+: invalid long string delimiter near")
 
 a = 'alo\n123"'
@@ -84,7 +84,7 @@ alo
 is("alo\n\*
 123\"", a)
 
-f, msg = loadstring [[a = " escape \* unauthorized
+f, msg = load [[a = " escape \* unauthorized
 new line" ]]
 like(msg, "^[^:]+:%d+: unfinished string near")
 
@@ -102,7 +102,7 @@ is(0x56, 86)
 --]]
 --]===]
 
-f, msg = loadstring "  --[[ unfinished long comment "
+f, msg = load "  --[[ unfinished long comment "
 like(msg, "^[^:]+:%d+: unfinished long comment near")
 
 -- Local Variables:

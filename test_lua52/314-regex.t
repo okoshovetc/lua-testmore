@@ -182,7 +182,7 @@ for _, filename in ipairs(test_files) do
                         return table.concat(t, "\t")
                     end
             ]]
-            local compiled, msg = loadstring(code)
+            local compiled, msg = load(code)
             if not compiled then
                 error("can't compile : " .. code .. "\n" .. msg)
             end
