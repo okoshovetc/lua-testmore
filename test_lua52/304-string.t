@@ -263,6 +263,9 @@ is(string.rep('ab', 3), 'ababab', "function rep")
 is(string.rep('ab', 0), '')
 is(string.rep('ab', -1), '')
 is(string.rep('', 5), '')
+if arg[-1] == 'luajit' then
+    todo("LuaJIT TODO. rep with sep", 1)
+end
 is(string.rep('ab', 3, ','), 'ab,ab,ab', "with sep")
 
 is(string.reverse('abcde'), 'edcba', "function reverse")

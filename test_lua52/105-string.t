@@ -168,6 +168,9 @@ error_like(function () return '1' > 0 end,
            "^[^:]+:%d+: attempt to compare %w+ with %w+",
            "'1' >== 0")
 
+if arg[-1] == 'luajit' then
+    todo("LuaJIT TODO. string.__index", 2)
+end
 error_like(function () a = 'text'; return a[1]; end,
            "^[^:]+:%d+: no field '1' in strings",
            "index")

@@ -308,11 +308,15 @@ is(rawequal(t, 2), false)
 is(rawequal(print, format), false)
 is(rawequal(print, 2), false)
 
-is(rawlen("text"), 4, "function rawlen (string)")
-is(rawlen({ 'a', 'b', 'c'}), 3, "function rawlen (table)")
-error_like(function () a = rawlen(true) end,
-           "^[^:]+:%d+: bad argument #1 to 'rawlen' %(table or string expected%)",
-           "function rawlen (bad arg)")
+if arg[-1] == 'luajit' then
+    skip("LuaJIT TODO. rawlen", 3)
+else
+    is(rawlen("text"), 4, "function rawlen (string)")
+    is(rawlen({ 'a', 'b', 'c'}), 3, "function rawlen (table)")
+    error_like(function () a = rawlen(true) end,
+               "^[^:]+:%d+: bad argument #1 to 'rawlen' %(table or string expected%)",
+               "function rawlen (bad arg)")
+end
 
 t = {a = 'letter a', b = 'letter b'}
 is(rawget(t, 'a'), 'letter a', "function rawget")

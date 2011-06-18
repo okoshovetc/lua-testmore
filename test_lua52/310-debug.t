@@ -115,6 +115,9 @@ error_like(function () debug.setlocal(42, 1, true) end,
 
 t = {}
 t1 = {}
+if arg[-1] == 'luajit' then
+    todo("LuaJIT TODO. debug.setmetatable", 1)
+end
 is(debug.setmetatable(t, t1), t, "function setmetatable")
 is(getmetatable(t), t1)
 
