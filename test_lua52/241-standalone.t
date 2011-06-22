@@ -29,7 +29,7 @@ require 'Test.More'
 
 local lua = (platform and platform.lua) or arg[-1]
 
-plan(22)
+plan(27)
 diag(lua)
 
 f = io.open('hello.lua', 'w')
@@ -78,9 +78,22 @@ f = io.popen(cmd)
 is(f:read'*l', '1', "-e")
 f:close()
 
-cmd = lua .. [[ -e "error(setmetatable({}, {__tostring=function() return 'msg' end}))"  2>&1]]
+cmd = lua .. [[ -e "error('msg')"  2>&1]]
 f = io.popen(cmd)
-is(f:read'*l', lua .. [[: msg]], "error with object")
+is(f:read'*l', lua .. [[: (command line):1: msg]], "error")
+is(f:read'*l', "stack traceback:", "backtrace")
+f:close()
+
+cmd = lua .. [[ -e "error(setmetatable({}, {__tostring=function() return 'MSG' end}))"  2>&1]]
+f = io.popen(cmd)
+is(f:read'*l', lua .. [[: MSG]], "error with object")
+is(f:read'*l', nil, "not backtrace")
+f:close()
+
+cmd = lua .. [[ -e "error{}"  2>&1]]
+f = io.popen(cmd)
+is(f:read'*l', lua .. [[: (no error message)]], "error")
+is(f:read'*l', nil, "not backtrace")
 f:close()
 
 cmd = lua .. [[ -e"a=1" -e "print(a)" hello.lua]]
