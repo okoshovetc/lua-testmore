@@ -86,12 +86,18 @@ f:close()
 
 cmd = lua .. [[ -e "error(setmetatable({}, {__tostring=function() return 'MSG' end}))"  2>&1]]
 f = io.popen(cmd)
+if arg[-1] == 'luajit' then
+    todo("LuaJIT TODO.", 1)
+end
 is(f:read'*l', lua .. [[: MSG]], "error with object")
 is(f:read'*l', nil, "not backtrace")
 f:close()
 
 cmd = lua .. [[ -e "error{}"  2>&1]]
 f = io.popen(cmd)
+if arg[-1] == 'luajit' then
+    todo("LuaJIT TODO.", 1)
+end
 is(f:read'*l', lua .. [[: (no error message)]], "error")
 is(f:read'*l', nil, "not backtrace")
 f:close()
