@@ -29,7 +29,7 @@ require 'Test.More'
 
 local lua = (platform and platform.lua) or arg[-1]
 
-plan(21)
+plan(22)
 diag(lua)
 
 f = io.open('hello.lua', 'w')
@@ -76,6 +76,11 @@ f:close()
 cmd = lua .. [[ -e"a=1" -e "print(a)"]]
 f = io.popen(cmd)
 is(f:read'*l', '1', "-e")
+f:close()
+
+cmd = lua .. [[ -e "error(setmetatable({}, {__tostring=function() return 'msg' end}))"  2>&1]]
+f = io.popen(cmd)
+is(f:read'*l', lua .. [[: msg]], "error with object")
 f:close()
 
 cmd = lua .. [[ -e"a=1" -e "print(a)" hello.lua]]
