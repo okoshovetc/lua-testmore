@@ -35,15 +35,6 @@ plan(39)
 
 debug = require 'debug'
 
-if arg[-1] == 'luajit' then
-    skip("LuaJIT: getuservalue", 2)
-else
-    local u = debug.getuservalue(require 'io'.stdout)
-    type_ok(u, 'table', "function getuservalue")
-    u = debug.getuservalue(debug)
-    is(u, nil)
-end
-
 info = debug.getinfo(is)
 type_ok(info, 'table', "function getinfo (function)")
 is(info.func, is, " .func")
@@ -131,15 +122,20 @@ local name = debug.setupvalue(plan, 42, true)
 is(name, nil)
 
 if arg[-1] == 'luajit' then
-    skip("LuaJIT: setuservalue", 3)
+    skip("LuaJIT: setuservalue", 5)
 else
     local u = io.tmpfile()
     local old = debug.getuservalue(u)
-    r = debug.setuservalue(u, nil)
+    is(old, nil, "function getuservalue")
+    local data = {}
+    r = debug.setuservalue(u, data)
     is(r, u, "function setuservalue")
-    is(debug.getuservalue(u), nil)
+    is(debug.getuservalue(u), data)
     r = debug.setuservalue(u, old)
     is(debug.getuservalue(u), old)
+
+    error_like(function () debug.setuservalue(u, true) end,
+               "^[^:]+:%d+: bad argument #2 to 'setuservalue' %(table expected, got boolean%)")
 end
 
 like(debug.traceback(), "^stack traceback:\n", "function traceback")
