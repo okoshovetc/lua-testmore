@@ -2,7 +2,7 @@
 --
 -- lua-TestMore : <http://fperrad.github.com/lua-TestMore/>
 --
--- Copyright (C) 2009, Perrad Francois
+-- Copyright (C) 2009-2011, Perrad Francois
 --
 -- This code is licensed under the terms of the MIT/X11 license,
 -- like Lua itself.
@@ -84,7 +84,7 @@ is(string.format("%s %s", 1, 2, 3), '1 2', "function format (too many arg)")
 is(string.format("%% %s %%", 'percent'), '% percent %', "function format (%%)")
 
 error_like(function () string.format("%s %s", 1) end,
-           "^[^:]+:%d+: bad argument #3 to 'format' %(string expected, got no value%)",
+           "^[^:]+:%d+: bad argument #3 to 'format' %(.-no value%)",
            "function format (too few arg)")
 
 error_like(function () string.format('%d', 'toto') end,
