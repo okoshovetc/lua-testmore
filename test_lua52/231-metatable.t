@@ -193,9 +193,6 @@ function Cplx.mt.__len (a)
 end
 
 c1 = Cplx.new(3, 4)
-if arg[-1] == 'luajit' then
-    todo("LuaJIT TODO. __len.", 1)
-end
 is( #c1, 5, "cplx __len")
 
 function Cplx.mt.__eq (a, b)

@@ -91,9 +91,6 @@ f = io.popen(cmd)
 is(f:read'*l', 'reached', "function exit")
 is(f:read'*l', nil)
 code = f:close()
-if arg[-1] == 'luajit' then
-    todo("LuaJIT TODO. pipe exit code.", 1)
-end
 is(code, true, "exit code")
 
 cmd = lua .. [[ -e "print 'reached'; os.exit(3); print 'not reached';"]]
