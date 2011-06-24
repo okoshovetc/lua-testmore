@@ -53,16 +53,12 @@ error_like(function () string.char(0, 'bad') end,
            "^[^:]+:%d+: bad argument #2 to 'char' %(number expected, got string%)",
            "function char (bad arg)")
 
-if arg[-1] == 'luajit' then
-    skip("LuaJIT intentional. Cannot dump functions.", 2)
-else
-    d = string.dump(plan)
-    type_ok(d, 'string', "function dump")
+d = string.dump(plan)
+type_ok(d, 'string', "function dump")
 
-    error_like(function () string.dump(print) end,
-               "^[^:]+:%d+: unable to dump given function",
-               "function dump (C function)")
-end
+error_like(function () string.dump(print) end,
+           "^[^:]+:%d+: unable to dump given function",
+           "function dump (C function)")
 
 s = "hello world"
 eq_array({string.find(s, "hello")}, {1, 5}, "function find (mode plain)")
