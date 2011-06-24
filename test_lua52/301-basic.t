@@ -29,7 +29,7 @@ L<http://www.lua.org/manual/5.2/manual.html#6.1>.
 
 require 'Test.More'
 
-plan(150)
+plan(152)
 
 if arg[-1] == 'luajit' then
     like(_VERSION, '^Lua 5%.1', "variable _VERSION")
@@ -161,6 +161,24 @@ is(bar, nil)
 f()
 is(bar('ok'), 'ok')
 bar = nil
+
+t = { [[
+function baz (x)
+    return x
+end
+]] }
+i = -1
+function reader ()
+    i = i + 1
+    return t[i]
+end
+f, msg = load(reader)
+if msg then
+    diag(msg)
+end
+type_ok(f, 'function', "function load(pathological reader)")
+f()
+is(baz, nil)
 
 t = { [[?syntax error?]] }
 i = 0
