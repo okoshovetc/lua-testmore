@@ -2,7 +2,7 @@
 --
 -- lua-TestMore : <http://fperrad.github.com/lua-TestMore/>
 --
--- Copyright (C) 2009-2010, Perrad Francois
+-- Copyright (C) 2009-2011, Perrad Francois
 --
 -- This code is licensed under the terms of the MIT/X11 license,
 -- like Lua itself.
@@ -29,7 +29,7 @@ L<http://www.lua.org/manual/5.2/manual.html#6.3>.
 
 require 'Test.More'
 
-plan(31)
+plan(33)
 
 ok(package.loaded._G, "table package.loaded")
 ok(package.loaded.coroutine)
@@ -44,6 +44,18 @@ type_ok(package.path, 'string')
 
 type_ok(package.preload, 'table', "table package.preload")
 is(# package.preload, 0)
+
+if (platform and platform.compat)
+or (arg[-1] == 'luajit') then
+    type_ok(package.loaders, 'table', "table package.loaders")
+    if arg[-1] == 'luajit' then
+        todo("LuaJIT TODO. package.searchers", 1)
+    end
+    is(package.searchers, package.loaders, "alias")
+else
+    type_ok(package.searchers, 'table', "table package.searchers")
+    is(package.loaders, nil)
+end
 
 m = {}
 if (platform and platform.compat)

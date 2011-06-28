@@ -152,13 +152,13 @@ end
 if arg[-1] == 'luajit' then
     skip("LuaJIT: upvaluejoin", 2)
 else
-    debug.upvaluejoin (like, 1, unlike, 1)
+    debug.upvaluejoin (pass, 1, fail, 1)
 
     error_like(function () debug.upvaluejoin(true, 1, nil, 1) end,
                "bad argument #1 to 'upvaluejoin' %(function expected, got boolean%)",
                "function upvaluejoin (bad arg)")
 
-    error_like(function () debug.upvaluejoin(like, 1, true, 1) end,
+    error_like(function () debug.upvaluejoin(pass, 1, true, 1) end,
                "bad argument #3 to 'upvaluejoin' %(function expected, got boolean%)",
                "function upvaluejoin (bad arg)")
 end

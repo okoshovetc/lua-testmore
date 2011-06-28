@@ -24,7 +24,7 @@
 
 require 'Test.More'
 
-plan(52)
+plan(51)
 
 is(- '1', -1, "-'1'")
 
@@ -168,16 +168,8 @@ error_like(function () return '1' > 0 end,
            "^[^:]+:%d+: attempt to compare %w+ with %w+",
            "'1' >== 0")
 
-if arg[-1] == 'luajit' then
-    todo("LuaJIT TODO. string.__index", 2)
-end
-error_like(function () a = 'text'; return a[1]; end,
-           "^[^:]+:%d+: no field '1' in strings",
-           "index")
-
-error_like(function () a = 'text'; return a[{}]; end,
-           "^[^:]+:%d+: no such field in strings",
-           "index")
+a = 'text'
+is(a[1], nil, "index")
 
 error_like(function () a = 'text'; a[1] = 1; end,
            "^[^:]+:%d+: attempt to index",
