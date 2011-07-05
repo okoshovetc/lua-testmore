@@ -121,8 +121,8 @@ if arg[-1] == 'luajit' then
     todo("LuaJIT intentional. getfenv", 1)
 end
 error_like(function () getfenv() end,
-           "^[^:]+:%d+: deprecated function",
-           "function getfenv (deprecated)")
+           "^[^:]+:%d+: removed function",
+           "function getfenv (removed)")
 
 a = {'a','b','c'}
 local f, v, s = ipairs(a)
@@ -234,8 +234,8 @@ or (arg[-1] == 'luajit') then
     ok(loadstring[[i = i + 1]], "function loadstring")
 else
     error_like(function () loadstring[[i = i + 1]] end,
-               "^[^:]+:%d+: deprecated function",
-               "function loadstring (deprecated)")
+               "^[^:]+:%d+: removed function",
+               "function loadstring (removed)")
     loadstring = load
 end
 
@@ -357,8 +357,8 @@ if arg[-1] == 'luajit' then
     todo("LuaJIT intentional. setfenv", 1)
 end
 error_like(function () setfenv() end,
-           "^[^:]+:%d+: deprecated function",
-           "function setfenv (deprecated)")
+           "^[^:]+:%d+: removed function",
+           "function setfenv (removed)")
 
 is(type("Hello world"), 'string', "function type")
 is(type(10.4*3), 'number')

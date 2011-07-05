@@ -2,7 +2,7 @@
 --
 -- lua-TestMore : <http://fperrad.github.com/lua-TestMore/>
 --
--- Copyright (C) 2009-2010, Perrad Francois
+-- Copyright (C) 2009-2011, Perrad Francois
 --
 -- This code is licensed under the terms of the MIT/X11 license,
 -- like Lua itself.
@@ -31,7 +31,7 @@ See "Programming in Lua", section 19 "The Table Library".
 
 require 'Test.More'
 
-plan(47)
+plan(49)
 
 t = {'a','b','c','d','e'}
 is(table.concat(t), 'abcde', "function concat")
@@ -57,8 +57,8 @@ if arg[-1] == 'luajit' then
     todo("LuaJIT intentional. getn", 1)
 end
 error_like(function () table.getn() end,
-           "^[^:]+:%d+: deprecated function",
-           "function getn")
+           "^[^:]+:%d+: removed function",
+           "function getn (removed)")
 
 a = {10, 20, 30}
 table.insert(a, 1, 15)
@@ -85,15 +85,15 @@ if arg[-1] == 'luajit' then
     todo("LuaJIT intentional. foreach", 1)
 end
 error_like(function () table.foreach() end,
-           "^[^:]+:%d+: deprecated function",
-           "function foreach")
+           "^[^:]+:%d+: removed function",
+           "function foreach (removed)")
 
 if arg[-1] == 'luajit' then
     todo("LuaJIT intentional. foreachi", 1)
 end
 error_like(function () table.foreachi() end,
-           "^[^:]+:%d+: deprecated function",
-           "function foreachi")
+           "^[^:]+:%d+: removed function",
+           "function foreachi (removed)")
 
 if (platform and platform.compat)
 or (arg[-1] == 'luajit') then
@@ -109,25 +109,27 @@ or (arg[-1] == 'luajit') then
     is(table.maxn(a), 10000)
 else
     error_like(function () table.maxn() end,
-               "^[^:]+:%d+: deprecated function",
-               "function maxn (deprecated)")
-    skip("module (deprecated)", 3)
+               "^[^:]+:%d+: removed function",
+               "function maxn (removed)")
+    skip("maxn (removed)", 3)
 end
 
 if arg[-1] == 'luajit' then
-    skip("LuaJIT TODO. pack", 4)
+    skip("LuaJIT TODO. pack", 6)
 else
-    t = table.pack("abc", "def", "ghi")
+    t, n = table.pack("abc", "def", "ghi")
     eq_array(t, {
         "abc",
         "def",
         "ghi"
     }, "function pack")
     is(t.n, 3)
+    is(n, 3)
 
-    t = table.pack()
+    t, n = table.pack()
     eq_array(t, {}, "function pack (no element)")
     is(t.n, 0)
+    is(n, 0)
 end
 
 t = {}
