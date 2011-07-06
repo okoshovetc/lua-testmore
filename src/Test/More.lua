@@ -364,7 +364,7 @@ _G.Test.More = m
 
 m._VERSION = "0.2.3"
 m._DESCRIPTION = "lua-TestMore : an Unit Testing Framework"
-m._COPYRIGHT = "Copyright (c) 2009-2010 Francois Perrad"
+m._COPYRIGHT = "Copyright (c) 2009-2011 Francois Perrad"
 return m
 --
 -- This library is licensed under the terms of the MIT/X11 license,
