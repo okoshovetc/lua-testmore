@@ -63,9 +63,7 @@ or (arg[-1] == 'luajit') then
     package.seeall(m)
     m.pass("function package.seeall")
 else
-    error_like(function () package.seeall(m) end,
-               "^[^:]+:%d+: deprecated function",
-               "function package.seeall (deprecated)")
+    is(package.seeall, nil, "package.seeall (removed)")
 end
 
 local m = require 'Test.More'
@@ -207,10 +205,8 @@ or (arg[-1] == 'luajit') then
     _G.type_ok(_G.modz, 'table')
     _G.is(_G.modz, _G.package.loaded.modz)
 else
-    error_like(function () module('mod') end,
-               "^[^:]+:%d+: deprecated function",
-               "function module (deprecated)")
-    skip("module (deprecated)", 5)
+    is(module, nil, "module (removed)")
+    skip("module (removed)", 5)
 end
 
 -- Local Variables:

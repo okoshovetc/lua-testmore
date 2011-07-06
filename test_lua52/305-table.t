@@ -31,7 +31,7 @@ See "Programming in Lua", section 19 "The Table Library".
 
 require 'Test.More'
 
-plan(49)
+plan(46)
 
 t = {'a','b','c','d','e'}
 is(table.concat(t), 'abcde', "function concat")
@@ -52,13 +52,6 @@ t = {'a','b',true,'d','e'}
 error_like(function () table.concat(t, ',') end,
            "^[^:]+:%d+: invalid value %(boolean%) at index 3 in table for 'concat'",
            "function concat (non-string)")
-
-if arg[-1] == 'luajit' then
-    todo("LuaJIT intentional. getn", 1)
-end
-error_like(function () table.getn() end,
-           "^[^:]+:%d+: removed function",
-           "function getn (removed)")
 
 a = {10, 20, 30}
 table.insert(a, 1, 15)
@@ -81,20 +74,6 @@ error_like(function () table.insert(t, 2, 'g', 'h')  end,
            "^[^:]+:%d+: wrong number of arguments to 'insert'",
            "function insert (too many arg)")
 
-if arg[-1] == 'luajit' then
-    todo("LuaJIT intentional. foreach", 1)
-end
-error_like(function () table.foreach() end,
-           "^[^:]+:%d+: removed function",
-           "function foreach (removed)")
-
-if arg[-1] == 'luajit' then
-    todo("LuaJIT intentional. foreachi", 1)
-end
-error_like(function () table.foreachi() end,
-           "^[^:]+:%d+: removed function",
-           "function foreachi (removed)")
-
 if (platform and platform.compat)
 or (arg[-1] == 'luajit') then
     t = {}
@@ -108,9 +87,7 @@ or (arg[-1] == 'luajit') then
     a[10000] = 1
     is(table.maxn(a), 10000)
 else
-    error_like(function () table.maxn() end,
-               "^[^:]+:%d+: removed function",
-               "function maxn (removed)")
+    is(table.maxn, nil, "maxn (removed)")
     skip("maxn (removed)", 3)
 end
 

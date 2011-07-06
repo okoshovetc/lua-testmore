@@ -81,10 +81,10 @@ is([[alo
 is([==[
 alo
 123"]==], a)
-is("alo\n\*
+is("alo\n\z
 123\"", a)
 
-f, msg = load [[a = " escape \* unauthorized
+f, msg = load [[a = " escape \z unauthorized
 new line" ]]
 like(msg, "^[^:]+:%d+: unfinished string near")
 

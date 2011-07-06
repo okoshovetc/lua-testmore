@@ -2,7 +2,7 @@
 --
 -- lua-TestMore : <http://fperrad.github.com/lua-TestMore/>
 --
--- Copyright (C) 2009-2010, Perrad Francois
+-- Copyright (C) 2009-2011, Perrad Francois
 --
 -- This code is licensed under the terms of the MIT/X11 license,
 -- like Lua itself.
@@ -84,9 +84,7 @@ if (platform and platform.compat)
 or (arg[-1] == 'luajit') then
     like(math.log10(47), '^1%.672', "function log10")
 else
-    error_like(function () math.log10() end,
-               "^[^:]+:%d+: function 'log10' is deprecated; use log%(x, 10%) instead",
-               "function log10 (deprecated)")
+    is(math.log10, nil, "function log10 (removed)")
 end
 
 error_like(function () math.max() end,

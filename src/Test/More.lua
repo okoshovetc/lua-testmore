@@ -3,10 +3,7 @@
 -- lua-TestMore : <http://fperrad.github.com/lua-TestMore/>
 --
 
-local loadstring = loadstring
-if _VERSION == "Lua 5.2" then
-    loadstring = load
-end
+local loadstring = loadstring or load
 local pairs = pairs
 local pcall = pcall
 local require = require

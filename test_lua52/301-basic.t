@@ -29,7 +29,7 @@ L<http://www.lua.org/manual/5.2/manual.html#6.1>.
 
 require 'Test.More'
 
-plan(152)
+plan(150)
 
 if arg[-1] == 'luajit' then
     like(_VERSION, '^Lua 5%.1', "variable _VERSION")
@@ -116,13 +116,6 @@ error_like(function () dofile('foo.lua') end,
            "^foo%.lua:%d+:",
            "function dofile (syntax error)")
 os.remove('foo.lua') -- clean up
-
-if arg[-1] == 'luajit' then
-    todo("LuaJIT intentional. getfenv", 1)
-end
-error_like(function () getfenv() end,
-           "^[^:]+:%d+: removed function",
-           "function getfenv (removed)")
 
 a = {'a','b','c'}
 local f, v, s = ipairs(a)
@@ -233,9 +226,7 @@ if (platform and platform.compat)
 or (arg[-1] == 'luajit') then
     ok(loadstring[[i = i + 1]], "function loadstring")
 else
-    error_like(function () loadstring[[i = i + 1]] end,
-               "^[^:]+:%d+: removed function",
-               "function loadstring (removed)")
+    is(loadstring, nil, "function loadstring (removed)")
     loadstring = load
 end
 
@@ -352,13 +343,6 @@ eq_array({select(5,'a','b','c')}, {})
 error_like(function () select(0,'a','b','c') end,
            "^[^:]+:%d+: bad argument #1 to 'select' %(index out of range%)",
            "function select (out of range)")
-
-if arg[-1] == 'luajit' then
-    todo("LuaJIT intentional. setfenv", 1)
-end
-error_like(function () setfenv() end,
-           "^[^:]+:%d+: removed function",
-           "function setfenv (removed)")
 
 is(type("Hello world"), 'string', "function type")
 is(type(10.4*3), 'number')
