@@ -29,7 +29,7 @@ L<http://www.lua.org/manual/5.2/manual.html#6.1>.
 
 require 'Test.More'
 
-plan(150)
+plan(154)
 
 if arg[-1] == 'luajit' then
     like(_VERSION, '^Lua 5%.1', "variable _VERSION")
@@ -339,8 +339,15 @@ is(select('#','a','b','c'), 3)
 eq_array({select(1,'a','b','c')}, {'a','b','c'})
 eq_array({select(3,'a','b','c')}, {'c'})
 eq_array({select(5,'a','b','c')}, {})
+eq_array({select(-1,'a','b','c')}, {'c'})
+eq_array({select(-2,'a','b','c')}, {'b', 'c'})
+eq_array({select(-3,'a','b','c')}, {'a', 'b', 'c'})
 
 error_like(function () select(0,'a','b','c') end,
+           "^[^:]+:%d+: bad argument #1 to 'select' %(index out of range%)",
+           "function select (out of range)")
+
+error_like(function () select(-4,'a','b','c') end,
            "^[^:]+:%d+: bad argument #1 to 'select' %(index out of range%)",
            "function select (out of range)")
 
