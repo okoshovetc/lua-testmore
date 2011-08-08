@@ -33,7 +33,7 @@ if arg[-1] == 'luajit' then
     skip_all("LuaJIT. bit32")
 end
 
-plan(13)
+plan(20)
 
 is(bit32.band(0x01, 0x03, 0x07), 0x01, "function band")
 
@@ -52,13 +52,39 @@ is(bit32.rrotate(0x06, 1), 0x03, "function rrotate")
 
 is(bit32.arshift(0x06, 1), 0x03, "function arshift")
 
+is(bit32.arshift(-3, 1), bit32.arshift(-6, 2), "function arshift")
+
 is(bit32.lshift(0x03, 2), 0x0C, "function lshift")
 
 is(bit32.rshift(0x06, 1), 0x03, "function rshift")
 
 is(bit32.extract(0xFFFF, 3, 3), 0x07, "function extract")
 
+error_like(function () bit32.extract(0xFFFF, 99) end,
+           "^[^:]+:%d+: trying to access non%-existent bits",
+           "function extract (non-existent bits)")
+
+error_like(function () bit32.extract(0xFFFF, -3) end,
+           "^[^:]+:%d+: bad argument #2 to 'extract' %(field cannot be negative%)",
+           "function extract (negatif field)")
+
+error_like(function () bit32.extract(0xFFFF, 3, -3) end,
+           "^[^:]+:%d+: bad argument #3 to 'extract' %(width must be positive%)",
+           "function extract (negative width)")
+
 is(bit32.replace(0x0000, 0xFFFF, 3, 3), 0x38, "function replace")
+
+error_like(function () bit32.replace(0x0000, 0xFFFF, 99) end,
+           "^[^:]+:%d+: trying to access non%-existent bits",
+           "function replace (non-existent bits)")
+
+error_like(function () bit32.replace(0x0000, 0xFFFF, -3) end,
+           "^[^:]+:%d+: bad argument #3 to 'replace' %(field cannot be negative%)",
+           "function replace (negatif field)")
+
+error_like(function () bit32.replace(0x0000, 0xFFFF, 3, -3) end,
+           "^[^:]+:%d+: bad argument #4 to 'replace' %(width must be positive%)",
+           "function replace (negative width)")
 
 -- Local Variables:
 --   mode: lua
