@@ -41,7 +41,7 @@ local function local_factorial (n)
     if n == 0 then
         return 1
     else
-        return n * factorial(n-1)
+        return n * local_factorial(n-1)
     end
 end
 is(local_factorial(7), 5040, "factorial (recursive)")

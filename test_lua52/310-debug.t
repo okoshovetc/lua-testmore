@@ -31,7 +31,7 @@ See "Programming in Lua", section 23 "The Debug Library".
 
 require 'Test.More'
 
-plan(39)
+plan(43)
 
 debug = require 'debug'
 
@@ -87,12 +87,16 @@ local name = debug.getupvalue(plan, 1)
 type_ok(name, 'string', "function getupvalue")
 
 debug.sethook()
-hook = debug.gethook()
+hook, mask, count = debug.gethook()
 is(hook, nil, "function gethook")
+is(mask, '')
+is(count, 0)
 local function f () end
-debug.sethook(f, 'c')
-hook = debug.gethook()
+debug.sethook(f, 'c', 42)
+hook , mask, count = debug.gethook()
 is(hook, f, "function gethook")
+is(mask, 'c')
+is(count, 42)
 
 local name = debug.setlocal(0, 1, 0)
 type_ok(name, 'string', "function setlocal (level)")

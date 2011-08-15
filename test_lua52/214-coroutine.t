@@ -2,7 +2,7 @@
 --
 -- lua-TestMore : <http://fperrad.github.com/lua-TestMore/>
 --
--- Copyright (C) 2009-2010, Perrad Francois
+-- Copyright (C) 2009-2011, Perrad Francois
 --
 -- This code is licensed under the terms of the MIT/X11 license,
 -- like Lua itself.
@@ -29,7 +29,7 @@ See "Programming in Lua", section 9 "Coroutines".
 
 require 'Test.More'
 
-plan(20)
+plan(25)
 
 --[[ ]]
 output = {}
@@ -70,6 +70,9 @@ output = ''
 coroutine.resume(co)
 is(output, 'hi')
 is(coroutine.status(co), 'dead')
+
+error_like(function () coroutine.create(true) end,
+           "^[^:]+:%d+: bad argument #1 to 'create' %(function expected, got boolean%)")
 
 --[[ ]]
 output = {}
@@ -142,6 +145,22 @@ eq_array(output, {true, false})
 --[[ ]]
 co = coroutine.wrap(print)
 type_ok(co, 'function')
+
+error_like(function () coroutine.wrap(true) end,
+           "^[^:]+:%d+: bad argument #1 to 'wrap' %(function expected, got boolean%)")
+
+--[[ ]]
+co = coroutine.create(function ()
+        error "in coro"
+    end)
+r, msg = coroutine.resume(co)
+is(r, false)
+like(msg, "^[^:]+:%d+: in coro$")
+
+--[[ ]]
+error_like(function () coroutine.yield() end,
+           "attempt to yield")
+
 
 -- Local Variables:
 --   mode: lua

@@ -31,7 +31,7 @@ See "Programming in Lua", section 20 "The String Library".
 
 require 'Test.More'
 
-plan(109)
+plan(110)
 
 is(string.byte('ABC'), 65, "function byte")
 is(string.byte('ABC', 2), 66)
@@ -271,6 +271,7 @@ is(string.reverse(''), '')
 is(string.sub('abcde', 1, 2), 'ab', "function sub")
 is(string.sub('abcde', 3, 4), 'cd')
 is(string.sub('abcde', -2), 'de')
+is(string.sub('abcde', 3, 2), '')
 
 is(string.upper('Test'), 'TEST', "function upper")
 is(string.upper('TeSt'), 'TEST')

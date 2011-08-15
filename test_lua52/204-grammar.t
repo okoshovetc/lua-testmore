@@ -27,7 +27,7 @@ L<http://www.lua.org/manual/5.2/manual.html#9>.
 
 require 'Test.More'
 
-plan(3)
+plan(4)
 
 --[[ empty statement ]]
 f, msg = load [[; a = 1]]
@@ -65,6 +65,17 @@ function f()
     print "after"
 end
 ]], "break anywhere")
+
+--[[ goto ]]
+if arg[-1] == 'luajit' then
+    todo("LuaJIT TODO. goto", 1)
+end
+f, msg = load [[
+::label::
+goto unknown
+]]
+like(msg, ":%d+: no visible label 'unknown' for <goto> at line %d+", "unknown goto")
+
 
 -- Local Variables:
 --   mode: lua

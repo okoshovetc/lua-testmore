@@ -29,13 +29,14 @@ See "Programming in Lua", section 13 "Metatables and Metamethods".
 
 require 'Test.More'
 
-plan(91)
+plan(92)
 
 t = {}
 is(getmetatable(t), nil, "metatable")
 t1 = {}
 is(setmetatable(t, t1), t)
 is(getmetatable(t), t1)
+is(setmetatable(t, nil), t)
 error_like(function () setmetatable(t, true) end,
            "^[^:]+:%d+: bad argument #2 to 'setmetatable' %(nil or table expected%)")
 
