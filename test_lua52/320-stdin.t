@@ -2,7 +2,7 @@
 --
 -- lua-TestMore : <http://fperrad.github.com/lua-TestMore/>
 --
--- Copyright (C) 2009-2010, Perrad Francois
+-- Copyright (C) 2009-2011, Perrad Francois
 --
 -- This code is licensed under the terms of the MIT/X11 license,
 -- like Lua itself.
@@ -28,7 +28,7 @@ require 'Test.More'
 
 local lua = (platform and platform.lua) or arg[-1]
 
-plan(10)
+plan(12)
 
 f = io.open('lib1.lua', 'w')
 f:write[[
@@ -96,6 +96,20 @@ is(f:read'*l', nil)
 f:close()
 
 os.remove('file.txt') -- clean up
+
+f = io.open('dbg.txt', 'w')
+f:write("print 'ok'\n")
+f:write("error 'dbg'\n")
+f:write("cont\n")
+f:close()
+
+cmd = lua .. [[ -e "debug.debug()" < dbg.txt]]
+f = io.popen(cmd)
+is(f:read'*l', 'ok', "function debug.debug")
+is(f:read'*l', nil)
+f:close()
+
+os.remove('dbg.txt') -- clean up
 
 
 -- Local Variables:

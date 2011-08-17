@@ -29,7 +29,7 @@ See "Programming in Lua", section 9 "Coroutines".
 
 require 'Test.More'
 
-plan(25)
+plan(30)
 
 --[[ ]]
 output = {}
@@ -73,6 +73,12 @@ is(coroutine.status(co), 'dead')
 
 error_like(function () coroutine.create(true) end,
            "^[^:]+:%d+: bad argument #1 to 'create' %(function expected, got boolean%)")
+
+error_like(function () coroutine.resume(true) end,
+           "^[^:]+:%d+: bad argument #1 to 'resume' %(coroutine expected%)")
+
+error_like(function () coroutine.status(true) end,
+           "^[^:]+:%d+: bad argument #1 to 'status' %(coroutine expected%)")
 
 --[[ ]]
 output = {}
@@ -124,6 +130,17 @@ end)
 eq_array({co("Hello")}, {"Hello"})
 eq_array({co("World")}, {true, "World"})
 
+co = coroutine.wrap(function(...)
+  function backtrace ()
+    return 'not a back trace'
+  end
+  return xpcall(function(...)
+    return coroutine.yield(...)
+  end, backtrace, ...)
+end)
+eq_array({co("Hello")}, {"Hello"})
+eq_array({co("World")}, {true, "World"})
+
 --[[ ]]
 local output = {}
 co = coroutine.wrap(function()
@@ -148,6 +165,10 @@ type_ok(co, 'function')
 
 error_like(function () coroutine.wrap(true) end,
            "^[^:]+:%d+: bad argument #1 to 'wrap' %(function expected, got boolean%)")
+
+co = coroutine.wrap(function () error"in coro" end)
+error_like(function () co() end,
+           "^[^:]+:%d+: [^:]+:%d+: in coro$")
 
 --[[ ]]
 co = coroutine.create(function ()

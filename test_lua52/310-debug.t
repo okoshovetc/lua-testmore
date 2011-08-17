@@ -31,7 +31,7 @@ See "Programming in Lua", section 23 "The Debug Library".
 
 require 'Test.More'
 
-plan(43)
+plan(47)
 
 debug = require 'debug'
 
@@ -98,6 +98,13 @@ is(hook, f, "function gethook")
 is(mask, 'c')
 is(count, 42)
 
+co = coroutine.create(function () print "thread" end)
+hook = debug.gethook(co)
+if arg[-1] == 'luajit' then
+    todo("LuaJIT TODO. debug.gethook(thread)", 1)
+end
+is(hook, nil, "function gethook(thread)")
+
 local name = debug.setlocal(0, 1, 0)
 type_ok(name, 'string', "function setlocal (level)")
 
@@ -126,17 +133,21 @@ local name = debug.setupvalue(plan, 42, true)
 is(name, nil)
 
 if arg[-1] == 'luajit' then
-    skip("LuaJIT: setuservalue", 5)
+    skip("LuaJIT: setuservalue", 7)
 else
     local u = io.tmpfile()
     local old = debug.getuservalue(u)
     is(old, nil, "function getuservalue")
+    is(debug.getuservalue(true), nil)
     local data = {}
     r = debug.setuservalue(u, data)
     is(r, u, "function setuservalue")
     is(debug.getuservalue(u), data)
     r = debug.setuservalue(u, old)
     is(debug.getuservalue(u), old)
+
+    error_like(function () debug.setuservalue({}, data) end,
+               "^[^:]+:%d+: bad argument #1 to 'setuservalue' %(userdata expected, got table%)")
 
     error_like(function () debug.setuservalue(u, true) end,
                "^[^:]+:%d+: bad argument #2 to 'setuservalue' %(table expected, got boolean%)")
@@ -145,6 +156,8 @@ end
 like(debug.traceback(), "^stack traceback:\n", "function traceback")
 
 like(debug.traceback("message\n"), "^message\n\nstack traceback:\n", "function traceback with message")
+
+like(debug.traceback(false), "false", "function traceback")
 
 if arg[-1] == 'luajit' then
     skip("LuaJIT: upvalueid", 1)

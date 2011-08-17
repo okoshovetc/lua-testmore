@@ -29,7 +29,7 @@ L<http://www.lua.org/manual/5.2/manual.html#6.1>.
 
 require 'Test.More'
 
-plan(154)
+plan(162)
 
 if arg[-1] == 'luajit' then
     like(_VERSION, '^Lua 5%.1', "variable _VERSION")
@@ -182,6 +182,9 @@ like(msg, "^%[string \"errorchunk\"%]:%d+:")
 f = load(function () return nil end)
 type_ok(f, 'function', "when reader returns nothing")
 
+f, msg = load(function () return {} end)
+is(f, nil, "reader function must return a string")
+like(msg, "^[^:]+:%d+: reader function must return a string")
 f = load([[
 function bar (x)
     return x
@@ -192,9 +195,34 @@ f()
 is(bar('ok'), 'ok')
 bar = nil
 
+if arg[-1] == 'luajit' then
+    skip("LuaJIT. load with env", 2)
+else
+    env = {}
+    f = load([[
+function bar (x)
+    return x
+end
+]], "from string", 't', env)
+    is(env.bar, nil, "function load(str)")
+    f()
+    is(env.bar('ok'), 'ok')
+end
+
 f, msg = load([[?syntax error?]], "errorchunk")
 is(f, nil, "function load(syntax error)")
 like(msg, "^%[string \"errorchunk\"%]:%d+:")
+
+if arg[-1] == 'luajit' then
+    todo("LuaJIT TODO. mode", 3)
+end
+f, msg = load([[print 'ok']], "chunk txt", 'b')
+like(msg, "attempt to load a text chunk")
+is(f, nil, "mode")
+
+f, msg = load("\x1bLua", "chunk bin", 't')
+like(msg, "attempt to load a binary chunk")
+is(f, nil, "mode")
 
 f = io.open('foo.lua', 'w')
 f:write[[

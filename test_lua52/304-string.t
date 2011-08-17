@@ -31,7 +31,7 @@ See "Programming in Lua", section 20 "The String Library".
 
 require 'Test.More'
 
-plan(110)
+plan(111)
 
 is(string.byte('ABC'), 65, "function byte")
 is(string.byte('ABC', 2), 66)
@@ -52,6 +52,10 @@ is(string.char(), '')
 error_like(function () string.char(0, 'bad') end,
            "^[^:]+:%d+: bad argument #2 to 'char' %(number expected, got string%)",
            "function char (bad arg)")
+
+error_like(function () string.char(0, 9999) end,
+           "^[^:]+:%d+: bad argument #2 to 'char' %(invalid value%)",
+           "function char (invalid)")
 
 d = string.dump(plan)
 type_ok(d, 'string', "function dump")

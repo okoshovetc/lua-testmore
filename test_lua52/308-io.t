@@ -31,7 +31,7 @@ See "Programming in Lua", section 21 "The I/O Library".
 
 require 'Test.More'
 
-plan(62)
+plan(65)
 
 like(io.stdin, '^file %(0?[Xx]?%x+%)$', "variable stdin")
 
@@ -63,11 +63,20 @@ error_like(function () io.close(f) end,
            "^[^:]+:%d+: attempt to use a closed file",
            "function close (closed)")
 
+if arg[-1] == 'luajit' then
+    todo("LuaJIT TODO. open mode")
+end
+error_like(function () io.open('file.txt', 'baz') end,
+           "^[^:]+:%d+: invalid mode 'baz' %(should match '%[rwa%]%%%+%?b%?'%)",
+           "function open (bad mode)")
+
 is(io.type("not a file"), nil, "function type")
 f = io.open('file.txt')
 is(io.type(f), 'file')
+like(tostring(f), '^file %(0?[Xx]?%x+%)$')
 io.close(f)
 is(io.type(f), 'closed file')
+is(tostring(f), 'file (closed)')
 
 is(io.stdin, io.input(), "function input")
 is(io.stdin, io.input(nil))

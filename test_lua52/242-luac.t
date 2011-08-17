@@ -39,13 +39,14 @@ diag(luac)
 
 f = io.open('hello.lua', 'w')
 f:write([[
-local a = 1
+local a = false
 b = a + 1
 pi = 3.14
 s = "all escaped \1\a\b\f\n\r\t\v\\\""
 local t = { "a", "b", "c", "d" }
 local f = table.concat
 local function f () while true do print(a) end end
+s = nil
 
 print 'Hello World'
 ]])

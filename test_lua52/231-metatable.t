@@ -29,7 +29,7 @@ See "Programming in Lua", section 13 "Metatables and Metamethods".
 
 require 'Test.More'
 
-plan(92)
+plan(94)
 
 t = {}
 is(getmetatable(t), nil, "metatable")
@@ -79,6 +79,21 @@ t.mt.__tostring = "not a function"
 error_like(function () tostring(t) end,
            "attempt to call",
            "__tostring invalid")
+
+t = {}
+mt = { __len=function () return 42 end }
+setmetatable(t, mt)
+is(#t, 42, "__len")
+
+t = {}
+mt = { __len=function () return nil end }
+setmetatable(t, mt)
+if arg[-1] == 'luajit' then
+    todo("LuaJIT TODO. __len.", 1)
+end
+error_like(function () print(table.concat(t)) end,
+           "object length is not a number",
+           "__len invalid")
 
 --[[ Cplx ]]
 Cplx = {}
