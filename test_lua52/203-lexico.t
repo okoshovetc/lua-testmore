@@ -27,7 +27,7 @@ L<http://www.lua.org/manual/5.2/manual.html#3.1>.
 
 require 'Test.More'
 
-plan(35)
+plan(37)
 
 is("\65", "A")
 is("\065", "A")
@@ -51,6 +51,12 @@ like(msg, "^[^:]+:%d+: .- escape .- near")
 
 f, msg = load [[a = "A\xyz"]]
 like(msg, "^[^:]+:%d+: .- near")
+
+if arg[-1] == 'luajit' then
+    todo("LuaJIT.")
+end
+f, msg = load [[a = "A\Z"]]
+like(msg, "^[^:]+:%d+: .- escape .- near")
 
 f, msg = load [[a = " unfinished string ]]
 like(msg, "^[^:]+:%d+: unfinished string near")
@@ -93,6 +99,9 @@ is(314.16e-2, 3.1416)
 is(0.31416E1, 3.1416)
 is(0xff, 255)
 is(0x56, 86)
+
+f, msg = load [[a = 12e34e56]]
+like(msg, "^[^:]+:%d+: malformed number near")
 
 --[===[
 --[[

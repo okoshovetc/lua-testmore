@@ -29,7 +29,7 @@ L<http://www.lua.org/manual/5.2/manual.html#6.1>.
 
 require 'Test.More'
 
-plan(162)
+plan(163)
 
 if arg[-1] == 'luajit' then
     like(_VERSION, '^Lua 5%.1', "variable _VERSION")
@@ -361,6 +361,10 @@ is(rawget(t, 'a'), 'letter a', "function rawget")
 t = {}
 is(rawset(t, 'a', 'letter a'), t, "function rawset")
 is(t.a, 'letter a')
+
+error_like(function () t = {}; rawset(t, nil, 42) end,
+           "^table index is nil",
+           "function rawset (table index is nil)")
 
 is(select('#'), 0, "function select")
 is(select('#','a','b','c'), 3)

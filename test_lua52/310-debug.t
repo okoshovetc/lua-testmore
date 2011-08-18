@@ -31,7 +31,7 @@ See "Programming in Lua", section 23 "The Debug Library".
 
 require 'Test.More'
 
-plan(47)
+plan(51)
 
 debug = require 'debug'
 
@@ -76,7 +76,17 @@ end
 t = {}
 is(debug.getmetatable(t), nil, "function getmetatable")
 t1 = {}
-setmetatable(t, t1)
+debug.setmetatable(t, t1)
+is(debug.getmetatable(t), t1)
+
+a = true
+is(debug.getmetatable(a), nil)
+debug.setmetatable(a, t1)
+is(debug.getmetatable(t), t1)
+
+a = 3.14
+is(debug.getmetatable(a), nil)
+debug.setmetatable(a, t1)
 is(debug.getmetatable(t), t1)
 
 local reg = debug.getregistry()

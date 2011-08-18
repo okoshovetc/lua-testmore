@@ -27,7 +27,7 @@ L<http://www.lua.org/manual/5.2/manual.html#9>.
 
 require 'Test.More'
 
-plan(4)
+plan(6)
 
 --[[ empty statement ]]
 f, msg = load [[; a = 1]]
@@ -68,7 +68,7 @@ end
 
 --[[ goto ]]
 if arg[-1] == 'luajit' then
-    todo("LuaJIT TODO. goto", 1)
+    todo("LuaJIT TODO. goto", 3)
 end
 f, msg = load [[
 ::label::
@@ -76,6 +76,21 @@ goto unknown
 ]]
 like(msg, ":%d+: no visible label 'unknown' for <goto> at line %d+", "unknown goto")
 
+f, msg = load [[
+::label::
+goto label
+::label::
+]]
+like(msg, ":%d+: label 'label' already defined on line %d+", "repeated label")
+
+f, msg = load [[
+::e::
+goto f
+local x
+::f::
+goto e
+]]
+like(msg, ":%d+: <goto f> at line %d+ jumps into the scope of local 'x'", "bad goto")
 
 -- Local Variables:
 --   mode: lua

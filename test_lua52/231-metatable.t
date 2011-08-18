@@ -29,7 +29,7 @@ See "Programming in Lua", section 13 "Metatables and Metamethods".
 
 require 'Test.More'
 
-plan(94)
+plan(96)
 
 t = {}
 is(getmetatable(t), nil, "metatable")
@@ -94,6 +94,17 @@ end
 error_like(function () print(table.concat(t)) end,
            "object length is not a number",
            "__len invalid")
+
+t = {}
+mt = {
+  __tostring=function () return 't' end,
+  __concat=function (op1, op2)
+        return tostring(op1) .. '|' .. tostring(op2)
+  end,
+}
+setmetatable(t, mt)
+is(t .. t .. t .. 4 ..'end', "t|t|t|4end", "__concat")
+
 
 --[[ Cplx ]]
 Cplx = {}
@@ -506,6 +517,17 @@ error_like(function () new_a = 1 end,
 declare 'new_a'
 new_a = 1
 is(new_a, 1)
+
+--[[ ]]
+local newindex = {}
+-- create metatable
+local mt = {
+    __newindex = newindex
+}
+local t = setmetatable({}, mt)
+t[1] = 42
+is(newindex[1], 42, "__newindex")
+
 
 -- Local Variables:
 --   mode: lua
