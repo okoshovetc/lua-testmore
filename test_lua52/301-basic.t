@@ -29,7 +29,7 @@ L<http://www.lua.org/manual/5.2/manual.html#6.1>.
 
 require 'Test.More'
 
-plan(163)
+plan(164)
 
 if arg[-1] == 'luajit' then
     like(_VERSION, '^Lua 5%.1', "variable _VERSION")
@@ -301,6 +301,10 @@ a = next(t, 1)
 is(a, 2)
 a = next(t, 3)
 is(a, nil)
+
+t = {}
+a = next(t, nil)
+is(a, nil, "function next (empty table)")
 
 a = {'a','b','c'}
 local f, v, s = pairs(a)
