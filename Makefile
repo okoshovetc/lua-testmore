@@ -18,12 +18,14 @@ install:
 	mkdir -p $(LIBDIR)/Test/Builder/Tester
 	cp src/Test/More.lua                    $(LIBDIR)/Test
 	cp src/Test/Builder.lua                 $(LIBDIR)/Test
+	cp src/Test/Builder/SocketOutput.lua    $(LIBDIR)/Test/Builder
 	cp src/Test/Builder/Tester.lua          $(LIBDIR)/Test/Builder
 	cp src/Test/Builder/Tester/File.lua     $(LIBDIR)/Test/Builder/Tester
 
 uninstall:
 	rm -f $(LIBDIR)/Test/More.lua
 	rm -f $(LIBDIR)/Test/Builder.lua
+	rm -f $(LIBDIR)/Test/Builder/SocketOutput.lua
 	rm -f $(LIBDIR)/Test/Builder/Tester.lua
 	rm -f $(LIBDIR)/Test/Builder/Tester/File.lua
 

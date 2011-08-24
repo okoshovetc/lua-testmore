@@ -1,7 +1,8 @@
 Revision history for lua-TestMore
 
-0.2.4
-	add Test.Builder.SocketOutput (request from Eric Wind)
+0.2.4  Wed Aug 24 21:30:00 2011
+	add Test.Builder.SocketOutput (request from Eric Wind for Corona SDK)
+	improve coverage of Lua 5.2.0 beta
 
 0.2.3  Fri Nov 26 10:30:00 2010
 	fix compatibility with Lua 5.2.0 alpha

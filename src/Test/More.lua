@@ -362,7 +362,7 @@ end
 _G.Test = _G.Test or {}
 _G.Test.More = m
 
-m._VERSION = "0.2.3"
+m._VERSION = "0.2.4"
 m._DESCRIPTION = "lua-TestMore : an Unit Testing Framework"
 m._COPYRIGHT = "Copyright (c) 2009-2011 Francois Perrad"
 return m
