@@ -184,7 +184,8 @@ type_ok(f, 'function', "when reader returns nothing")
 
 f, msg = load(function () return {} end)
 is(f, nil, "reader function must return a string")
-like(msg, "^[^:]+:%d+: reader function must return a string")
+like(msg, "reader function must return a string")
+
 f = load([[
 function bar (x)
     return x
