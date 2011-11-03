@@ -33,7 +33,7 @@ error_like(function () return -{} end,
 is(# {}, 0, "#{}")
 is(# {4,5,6}, 3)
 
-is(not t, true, "not {}")
+is(not {}, false, "not {}")
 
 error_like(function () return {} + 10 end,
            "^[^:]+:%d+: attempt to perform arithmetic on",
