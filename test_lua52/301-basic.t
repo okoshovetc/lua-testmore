@@ -29,7 +29,7 @@ L<http://www.lua.org/manual/5.2/manual.html#6.1>.
 
 require 'Test.More'
 
-plan(164)
+plan(162)
 
 if arg[-1] == 'luajit' then
     like(_VERSION, '^Lua 5%.1', "variable _VERSION")
@@ -74,11 +74,9 @@ is(collectgarbage('setpause', 10), 200)
 is(collectgarbage('setstepmul', 200), 200)
 is(collectgarbage(), 0)
 if arg[-1] == 'luajit' then
-    skip("LuaJIT. gc mode gen/inc", 4)
+    skip("LuaJIT. gc mode gen/inc", 2)
 else
-    is(collectgarbage('gen'), 0)
     is(collectgarbage('step'), false)
-    is(collectgarbage('inc'), 0)
     is(collectgarbage('setmajorinc'), 200)
 end
 

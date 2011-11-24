@@ -54,7 +54,7 @@ error_like(function () string.char(0, 'bad') end,
            "function char (bad arg)")
 
 error_like(function () string.char(0, 9999) end,
-           "^[^:]+:%d+: bad argument #2 to 'char' %(invalid value%)",
+           "^[^:]+:%d+: bad argument #2 to 'char' %(.-value.-%)",
            "function char (invalid)")
 
 d = string.dump(plan)
