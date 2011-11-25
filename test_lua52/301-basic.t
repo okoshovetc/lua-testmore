@@ -29,7 +29,7 @@ L<http://www.lua.org/manual/5.2/manual.html#6.1>.
 
 require 'Test.More'
 
-plan(162)
+plan(168)
 
 if arg[-1] == 'luajit' then
     like(_VERSION, '^Lua 5%.1', "variable _VERSION")
@@ -74,9 +74,11 @@ is(collectgarbage('setpause', 10), 200)
 is(collectgarbage('setstepmul', 200), 200)
 is(collectgarbage(), 0)
 if arg[-1] == 'luajit' then
-    skip("LuaJIT. gc mode gen/inc", 2)
+    skip("LuaJIT. gc mode gen/inc", 4)
 else
+    is(collectgarbage('generational'), 0)
     is(collectgarbage('step'), false)
+    is(collectgarbage('incremental'), 0)
     is(collectgarbage('setmajorinc'), 200)
 end
 
@@ -224,6 +226,7 @@ like(msg, "attempt to load a binary chunk")
 is(f, nil, "mode")
 
 f = io.open('foo.lua', 'w')
+f:write'\xEF\xBB\xBF' -- BOM
 f:write[[
 function foo (x)
     return x
@@ -234,6 +237,23 @@ f = loadfile('foo.lua')
 is(foo, nil, "function loadfile")
 f()
 is(foo('ok'), 'ok')
+
+if arg[-1] == 'luajit' then
+    todo("LuaJIT TODO. mode", 2)
+end
+f, msg = loadfile('foo.lua', 'b')
+like(msg, "attempt to load a text chunk")
+is(f, nil, "mode")
+
+if arg[-1] == 'luajit' then
+    skip("LuaJIT. loadfile with env", 2)
+else
+    env = {}
+    f = loadfile('foo.lua', 't', env)
+    is(env.foo, nil, "function loadfile")
+    f()
+    is(env.foo('ok'), 'ok')
+end
 
 os.remove('foo.lua') -- clean up
 
