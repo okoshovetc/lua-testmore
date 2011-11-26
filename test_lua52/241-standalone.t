@@ -29,7 +29,7 @@ require 'Test.More'
 
 local lua = (platform and platform.lua) or arg[-1]
 
-plan(27)
+plan(28)
 diag(lua)
 
 f = io.open('hello.lua', 'w')
@@ -131,6 +131,14 @@ f:close()
 cmd = lua .. [[ -v hello.lua 2>&1]]
 f = io.popen(cmd)
 like(f:read'*l', '^Lua', "-v & script")
+is(f:read'*l', 'Hello World')
+f:close()
+
+cmd = lua .. [[ -E hello.lua 2>&1]]
+f = io.popen(cmd)
+if arg[-1] == 'luajit' then
+    todo("LuaJIT TODO.", 1)
+end
 is(f:read'*l', 'Hello World')
 f:close()
 
