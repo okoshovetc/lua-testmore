@@ -31,7 +31,7 @@ See "Programming in Lua", section 19 "The Table Library".
 
 require 'Test.More'
 
-plan(46)
+plan(44)
 
 t = {'a','b','c','d','e'}
 is(table.concat(t), 'abcde', "function concat")
@@ -94,19 +94,17 @@ end
 if arg[-1] == 'luajit' then
     skip("LuaJIT TODO. pack", 6)
 else
-    t, n = table.pack("abc", "def", "ghi")
+    t = table.pack("abc", "def", "ghi")
     eq_array(t, {
         "abc",
         "def",
         "ghi"
     }, "function pack")
     is(t.n, 3)
-    is(n, 3)
 
-    t, n = table.pack()
+    t = table.pack()
     eq_array(t, {}, "function pack (no element)")
     is(t.n, 0)
-    is(n, 0)
 end
 
 t = {}
