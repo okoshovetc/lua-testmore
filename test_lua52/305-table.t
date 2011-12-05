@@ -92,7 +92,7 @@ else
 end
 
 if arg[-1] == 'luajit' then
-    skip("LuaJIT TODO. pack", 6)
+    skip("LuaJIT TODO. pack", 4)
 else
     t = table.pack("abc", "def", "ghi")
     eq_array(t, {
