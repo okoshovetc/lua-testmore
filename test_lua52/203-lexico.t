@@ -52,9 +52,6 @@ like(msg, "^[^:]+:%d+: .- escape .- near")
 f, msg = load [[a = "A\xyz"]]
 like(msg, "^[^:]+:%d+: .- near")
 
-if arg[-1] == 'luajit' then
-    todo("LuaJIT.")
-end
 f, msg = load [[a = "A\Z"]]
 like(msg, "^[^:]+:%d+: .- escape .- near")
 
