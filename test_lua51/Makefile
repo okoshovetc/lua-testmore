@@ -7,7 +7,7 @@ LUA_COVER = ../../gh-pages/lua-TestMore/lua-5.1.4/src/lua
 LUA_VERSION = $(shell $(LUA) -e "print(_VERSION)")
 OSNAME = $(shell perl -MConfig -e "print Config->{osname}")
 ARCHNAME = $(shell perl -MConfig -e "print Config->{archname}")
-INTSIZE = $(shell perl -MConfig -e "print Config->{intsize}")
+INTSIZE = $(shell perl -MConfig -e "print Config->{longsize}")
 
 export LUA_PATH=;;../src/?.lua
 export LUA_INIT=platform = { osname=[[$(OSNAME)]], intsize=$(INTSIZE) }
