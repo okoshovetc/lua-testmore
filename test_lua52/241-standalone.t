@@ -2,7 +2,7 @@
 --
 -- lua-TestMore : <http://fperrad.github.com/lua-TestMore/>
 --
--- Copyright (C) 2009-2011, Perrad Francois
+-- Copyright (C) 2009-2012, Perrad Francois
 --
 -- This code is licensed under the terms of the MIT/X11 license,
 -- like Lua itself.
@@ -86,10 +86,10 @@ f:close()
 
 cmd = lua .. [[ -e "error(setmetatable({}, {__tostring=function() return 'MSG' end}))"  2>&1]]
 f = io.popen(cmd)
-if arg[-1] == 'luajit' then
-    todo("LuaJIT TODO.", 1)
-end
 is(f:read'*l', lua .. [[: MSG]], "error with object")
+if arg[-1] == 'luajit' then
+    todo("LuaJIT intentional.", 1)
+end
 is(f:read'*l', nil, "not backtrace")
 f:close()
 
