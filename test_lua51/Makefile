@@ -2,7 +2,7 @@
 LUA = lua
 LUAJIT = luajit
 LLVM_LUA = llvm-lua
-LUA_COVER = ../../gh-pages/lua-TestMore/lua-5.1.4/src/lua
+LUA_COVER = ../../gh-pages/lua-TestMore/lua-5.1.5/src/lua
 
 LUA_VERSION = $(shell $(LUA) -e "print(_VERSION)")
 OSNAME = $(shell perl -MConfig -e "print Config->{osname}")
