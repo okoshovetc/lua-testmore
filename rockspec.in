@@ -31,7 +31,7 @@ dependencies = {
     'lua >= 5.1',
 }
 build = {
-    type = 'none',
+    type = 'builtin',
     modules = {
         ['Test.Builder']                = 'src/Test/Builder.lua',
         ['Test.Builder.SocketOutput']   = 'src/Test/Builder/SocketOutput.lua',
