@@ -359,8 +359,6 @@ end
 for k, v in pairs(m) do  -- injection
     _G[k] = v
 end
-_G.Test = _G.Test or {}
-_G.Test.More = m
 
 m._VERSION = "0.2.4"
 m._DESCRIPTION = "lua-TestMore : an Unit Testing Framework"
