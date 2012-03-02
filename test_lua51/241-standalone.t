@@ -92,12 +92,12 @@ f = io.popen(cmd)
 like(f:read'*l', '^usage: ', "unknown option")
 f:close()
 
-cmd = lua .. [[ -lTest.More -e "print(type(Test.More.ok))"]]
+cmd = lua .. [[ -lTest.More -e "print(type(ok))"]]
 f = io.popen(cmd)
 is(f:read'*l', 'function', "-lTest.More")
 f:close()
 
-cmd = lua .. [[ -l Test.More -e "print(type(Test.More.ok))"]]
+cmd = lua .. [[ -l Test.More -e "print(type(ok))"]]
 f = io.popen(cmd)
 is(f:read'*l', 'function', "-l Test.More")
 f:close()

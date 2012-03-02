@@ -52,7 +52,7 @@ m.pass("function package.seeall")
 
 local m = require 'Test.More'
 m.ok(true, "function require")
-is(m, Test.More)
+is(m, package.loaded['Test.More'])
 
 f = io.open('complex.lua', 'w')
 f:write [[
