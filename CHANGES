@@ -1,5 +1,11 @@
 Revision history for lua-TestMore
 
+0.3.0
+	work with Lua 5.2.0
+	add LuaDist support
+	INCOMPATIBILITY : now, the use of the following idiom is mandatory
+		local testmore = require 'Test.More'
+
 0.2.4  Wed Aug 24 21:30:00 2011
 	add Test.Builder.SocketOutput (request from Eric Wind for Corona SDK)
 	improve coverage of Lua 5.2.0 beta
