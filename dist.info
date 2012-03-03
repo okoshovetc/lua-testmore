@@ -1,6 +1,6 @@
 
 name = "lua-testmore"
-version = "0.2.4"
+version = "0.3.0"
 
 desc = "an Unit Testing Framework"
 author = "Francois Perrad"

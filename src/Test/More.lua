@@ -360,9 +360,9 @@ for k, v in pairs(m) do  -- injection
     _G[k] = v
 end
 
-m._VERSION = "0.2.4"
+m._VERSION = "0.3.0"
 m._DESCRIPTION = "lua-TestMore : an Unit Testing Framework"
-m._COPYRIGHT = "Copyright (c) 2009-2011 Francois Perrad"
+m._COPYRIGHT = "Copyright (c) 2009-2012 Francois Perrad"
 return m
 --
 -- This library is licensed under the terms of the MIT/X11 license,
