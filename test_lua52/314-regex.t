@@ -51,7 +51,7 @@ Description of the test.
 
 require 'Test.More'
 
-plan(158)
+plan(162)
 
 local test_files = {
     'rx_captures',
@@ -63,10 +63,10 @@ local todo_info = {
 }
 
 if arg[-1] == 'luajit' then
-    todo_info[143] = "LuaJIT TODO. \\0"
-    todo_info[145] = "LuaJIT TODO. \\0"
-    todo_info[147] = "LuaJIT TODO. [^\\0]"
-    todo_info[149] = "LuaJIT TODO. [^\\0]"
+    todo_info[147] = "LuaJIT TODO. \\0"
+    todo_info[149] = "LuaJIT TODO. \\0"
+    todo_info[151] = "LuaJIT TODO. [^\\0]"
+    todo_info[153] = "LuaJIT TODO. [^\\0]"
 end
 
 local function split (line)
