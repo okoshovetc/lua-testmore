@@ -49,22 +49,25 @@ like(f:read'*l', "^[^:]+: cannot open no_file.lua", "no file")
 f:close()
 
 if arg[-1] == 'luajit' then
-    skip("LuaJIT intentional. cannot load Lua bytecode", 3)
+    os.execute(lua .. " -b hello.lua hello.luac")
 else
     os.execute(lua .. "c -s -o hello.luac hello.lua")
-    cmd = lua .. " hello.luac"
-    f = io.popen(cmd)
-    is(f:read'*l', 'Hello World', "bytecode")
-    f:close()
+end
+cmd = lua .. " hello.luac"
+f = io.popen(cmd)
+is(f:read'*l', 'Hello World', "bytecode")
+f:close()
+os.remove('hello.luac') -- clean up
 
+if arg[-1] == 'luajit' then
+    skip("LuaJIT intentional. cannot combine sources", 2)
+else
     os.execute(lua .. "c -s -o hello2.luac hello.lua hello.lua")
     cmd = lua .. " hello2.luac"
     f = io.popen(cmd)
     is(f:read'*l', 'Hello World', "combine 1")
     is(f:read'*l', 'Hello World', "combine 2")
     f:close()
-
-    os.remove('hello.luac') -- clean up
     os.remove('hello2.luac') -- clean up
 end
 
