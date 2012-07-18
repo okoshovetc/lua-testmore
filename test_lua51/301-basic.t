@@ -81,7 +81,7 @@ like(twice(n), '^7%.088', "function dofile")
 os.remove('lib1.lua') -- clean up
 
 error_like(function () dofile('no_file.lua') end,
-           "cannot open no_file.lua: No such file or directory",
+           "cannot open no_file.lua: ",
            "function dofile (no file)")
 
 f = io.open('foo.lua', 'w')
@@ -144,7 +144,7 @@ os.remove('foo.lua') -- clean up
 
 f, msg = loadfile('no_file.lua')
 is(f, nil, "function loadfile (no file)")
-is(msg, "cannot open no_file.lua: No such file or directory")
+like(msg, "^cannot open no_file.lua: ")
 
 f = io.open('foo.lua', 'w')
 f:write[[?syntax error?]]

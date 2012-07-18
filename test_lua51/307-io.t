@@ -57,7 +57,7 @@ is(io.flush(), true, "function flush")
 os.remove('file.no')
 f, msg = io.open("file.no")
 is(f, nil, "function open")
-is(msg, "file.no: No such file or directory")
+like(msg, "^file.no: ")
 
 os.remove('file.txt')
 f = io.open('file.txt', 'w')
