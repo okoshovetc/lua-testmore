@@ -91,15 +91,23 @@ like(io.output('output.new'), '^file %(0?[Xx]?%x+%)$')
 is(f, io.output(f))
 os.remove('output.new')
 
-f = io.popen([[perl -e "print 'standard output'"]])
-is(io.type(f), 'file', "popen (read)")
-is(f:read(), "standard output")
-is(io.close(f), true)
+r, f = pcall(io.popen, [[perl -e "print 'standard output'"]])
+if r then
+    is(io.type(f), 'file', "popen (read)")
+    is(f:read(), "standard output")
+    is(io.close(f), true)
+else
+    skip("io.popen not supported", 3)
+end
 
-f = io.popen([[perl -pe "s/e/a/"]], 'w')
-is(io.type(f), 'file', "popen (write)")
-f:write("# hello\n") -- not tested : hallo
-is(io.close(f), true)
+r, f = pcall(io.popen, [[perl -pe "s/e/a/"]], 'w')
+if r then
+    is(io.type(f), 'file', "popen (write)")
+    f:write("# hello\n") -- not tested : hallo
+    is(io.close(f), true)
+else
+    skip("io.popen not supported", 2)
+end
 
 for line in io.lines('file.txt') do
     is(line, "file with text", "function lines(filename)")

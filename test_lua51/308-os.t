@@ -68,10 +68,14 @@ else
 end
 
 cmd = lua .. [[ -e "print 'reached'; os.exit(); print 'not reached';"]]
-f = io.popen(cmd)
-is(f:read'*l', 'reached', "function exit")
-is(f:read'*l', nil)
-f:close()
+r, f = pcall(io.popen, cmd)
+if r then
+    is(f:read'*l', 'reached', "function exit")
+    is(f:read'*l', nil)
+    f:close()
+else
+    skip("io.popen not supported", 2)
+end
 
 is(os.getenv('__IMPROBABLE__'), nil, "function getenv")
 

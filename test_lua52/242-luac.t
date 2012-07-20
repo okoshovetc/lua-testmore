@@ -34,6 +34,10 @@ end
 local lua = (platform and platform.lua) or arg[-1]
 local luac = lua .. 'c'
 
+if not pcall(io.popen, lua .. [[ -e "a=1"]]) then
+    skip_all "io.popen not supported"
+end
+
 plan(10)
 diag(luac)
 
