@@ -35,11 +35,7 @@ plan(47)
 
 like(tostring(math.pi), '^3%.14', "variable pi")
 
-if platform and platform.osname == 'MSWin32' then
-    is(tostring(math.huge), '1.#INF', "variable huge")
-else
-    is(tostring(math.huge), 'inf', "variable huge")
-end
+type_ok(math.huge, 'number', "variable huge")
 
 is(math.abs(-12.34), 12.34, "function abs")
 is(math.abs(12.34), 12.34)
