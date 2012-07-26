@@ -2,7 +2,7 @@
 --
 -- lua-TestMore : <http://fperrad.github.com/lua-TestMore/>
 --
--- Copyright (C) 2010-2011, Perrad Francois
+-- Copyright (C) 2010-2012, Perrad Francois
 --
 -- This code is licensed under the terms of the MIT/X11 license,
 -- like Lua itself.
@@ -38,7 +38,7 @@ if not pcall(io.popen, lua .. [[ -e "a=1"]]) then
     skip_all "io.popen not supported"
 end
 
-plan(10)
+plan(14)
 diag(luac)
 
 f = io.open('hello.lua', 'w')
@@ -88,6 +88,38 @@ cmd = luac .. [[ -l luac.out]]
 f = io.popen(cmd)
 is(f:read'*l', '')
 like(f:read'*l', "^main")
+f:close()
+
+f = io.open('luac.out', 'w')
+f:write "\x1bLua\x52\x00"
+f:close()
+cmd = luac .. [[ luac.out 2>&1]]
+f = io.popen(cmd)
+like(f:read'*l', "truncated precompiled chunk")
+f:close()
+
+f = io.open('luac.out', 'w')
+f:write "\x1bFoo\x52\x00\xde\xad\xbe\xef\x00\x19\x93\r\n\x1a\nCode"
+f:close()
+cmd = luac .. [[ luac.out 2>&1]]
+f = io.popen(cmd)
+like(f:read'*l', "not a precompiled chunk")
+f:close()
+
+f = io.open('luac.out', 'w')
+f:write "\x1bLua\x51\x00\xde\xad\xbe\xef\x00\x19\x93\r\n\x1a\nCode"
+f:close()
+cmd = luac .. [[ luac.out 2>&1]]
+f = io.popen(cmd)
+like(f:read'*l', "version mismatch in precompiled chunk")
+f:close()
+
+f = io.open('luac.out', 'w')
+f:write "\x1bLua\x52\x00\xde\xad\xbe\xef\x00\x19\x93\r\n\x1a\nCode"
+f:close()
+cmd = luac .. [[ luac.out 2>&1]]
+f = io.popen(cmd)
+like(f:read'*l', "incompatible precompiled chunk")
 f:close()
 
 os.remove('hello.lua') -- clean up
