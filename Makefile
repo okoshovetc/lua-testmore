@@ -14,11 +14,11 @@ all: dist.cmake
 	@echo "Nothing to build here, you can just make install"
 
 install:
-	$(INSTALL) -m 644 -D src/Test/More.lua                  $(LIBDIR)/Test
-	$(INSTALL) -m 644 -D src/Test/Builder.lua               $(LIBDIR)/Test
-	$(INSTALL) -m 644 -D src/Test/Builder/SocketOutput.lua  $(LIBDIR)/Test/Builder
-	$(INSTALL) -m 644 -D src/Test/Builder/Tester.lua        $(LIBDIR)/Test/Builder
-	$(INSTALL) -m 644 -D src/Test/Builder/Tester/File.lua   $(LIBDIR)/Test/Builder/Tester
+	$(INSTALL) -m 644 -D src/Test/More.lua                  $(LIBDIR)/Test/More.lua
+	$(INSTALL) -m 644 -D src/Test/Builder.lua               $(LIBDIR)/Test/Builder.lua
+	$(INSTALL) -m 644 -D src/Test/Builder/SocketOutput.lua  $(LIBDIR)/Test/Builder/SocketOutput.lua
+	$(INSTALL) -m 644 -D src/Test/Builder/Tester.lua        $(LIBDIR)/Test/Builder/Tester.lua
+	$(INSTALL) -m 644 -D src/Test/Builder/Tester/File.lua   $(LIBDIR)/Test/Builder/Tester/File.lua
 
 uninstall:
 	rm -f $(LIBDIR)/Test/More.lua
