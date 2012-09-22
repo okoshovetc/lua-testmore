@@ -50,9 +50,6 @@ else
     like(msg, "^[^:]+:%d+: <break> at line 5 not inside a loop", "orphan break")
 end
 
-if arg[-1] == 'luajit' then
-    todo("LuaJIT TODO. break", 1)
-end
 --[[ break anywhere ]]
 lives_ok( [[
 function f()

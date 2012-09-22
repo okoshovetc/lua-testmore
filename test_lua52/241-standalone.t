@@ -143,9 +143,6 @@ f:close()
 
 cmd = lua .. [[ -E hello.lua 2>&1]]
 f = io.popen(cmd)
-if arg[-1] == 'luajit' then
-    todo("LuaJIT TODO.", 1)
-end
 is(f:read'*l', 'Hello World')
 f:close()
 
