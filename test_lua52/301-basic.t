@@ -214,15 +214,12 @@ f, msg = load([[?syntax error?]], "errorchunk")
 is(f, nil, "function load(syntax error)")
 like(msg, "^%[string \"errorchunk\"%]:%d+:")
 
-if arg[-1] == 'luajit' then
-    todo("LuaJIT TODO. mode", 3)
-end
 f, msg = load([[print 'ok']], "chunk txt", 'b')
-like(msg, "attempt to load a text chunk")
+like(msg, "attempt to load")
 is(f, nil, "mode")
 
 f, msg = load("\x1bLua", "chunk bin", 't')
-like(msg, "attempt to load a binary chunk")
+like(msg, "attempt to load")
 is(f, nil, "mode")
 
 f = io.open('foo.lua', 'w')
@@ -238,11 +235,8 @@ is(foo, nil, "function loadfile")
 f()
 is(foo('ok'), 'ok')
 
-if arg[-1] == 'luajit' then
-    todo("LuaJIT TODO. mode", 2)
-end
 f, msg = loadfile('foo.lua', 'b')
-like(msg, "attempt to load a text chunk")
+like(msg, "attempt to load")
 is(f, nil, "mode")
 
 if arg[-1] == 'luajit' then

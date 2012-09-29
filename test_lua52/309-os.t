@@ -66,9 +66,6 @@ is(os.difftime(1234, 1200), 34, "function difftime")
 is(os.difftime(1234), 1234)
 
 r = os.execute()
-if arg[-1] == 'luajit' then
-    todo("LuaJIT TODO. execute", 8)
-end
 is(r, true, "function execute")
 
 cmd = lua .. [[ -e "print '# hello from external Lua'; os.exit(2)"]]
@@ -103,9 +100,6 @@ if r then
     is(f:read'*l', 'reached', "function exit")
     is(f:read'*l', nil)
     r, s, n = f:close()
-    if arg[-1] == 'luajit' then
-        todo("LuaJIT TODO. pipe exit code.", 3)
-    end
     is(r, nil)
     is(s, 'exit', "exit code")
     is(n, 3, "exit value")

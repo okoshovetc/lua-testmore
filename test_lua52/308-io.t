@@ -226,12 +226,7 @@ error_like(function () f:write('end') end,
            "method write (closed)")
 
 f = io.open('file.out', 'w')
-if arg[-1] == 'luajit' then
-    is(f:write('end'), true, "method write")
-    diag("LuaJIT TODO. write")
-else
-    is(f:write('end'), f, "method write")
-end
+is(f:write('end'), f, "method write")
 f:close()
 
 os.remove('file.out') --clean up
