@@ -138,9 +138,10 @@ is(name, nil)
 local u = io.tmpfile()
 local old = debug.getuservalue(u)
 if arg[-1] == 'luajit' then
-    todo("LuaJIT: getuservalue", 1)
+    type_ok(old, 'table', "function getuservalue")
+else
+    is(old, nil, "function getuservalue")
 end
-is(old, nil, "function getuservalue")
 is(debug.getuservalue(true), nil)
 local data = {}
 r = debug.setuservalue(u, data)
