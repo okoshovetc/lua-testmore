@@ -196,19 +196,15 @@ f()
 is(bar('ok'), 'ok')
 bar = nil
 
-if arg[-1] == 'luajit' then
-    skip("LuaJIT. load with env", 2)
-else
-    env = {}
-    f = load([[
+env = {}
+f = load([[
 function bar (x)
     return x
 end
 ]], "from string", 't', env)
-    is(env.bar, nil, "function load(str)")
-    f()
-    is(env.bar('ok'), 'ok')
-end
+is(env.bar, nil, "function load(str)")
+f()
+is(env.bar('ok'), 'ok')
 
 f, msg = load([[?syntax error?]], "errorchunk")
 is(f, nil, "function load(syntax error)")
@@ -239,15 +235,11 @@ f, msg = loadfile('foo.lua', 'b')
 like(msg, "attempt to load")
 is(f, nil, "mode")
 
-if arg[-1] == 'luajit' then
-    skip("LuaJIT. loadfile with env", 2)
-else
-    env = {}
-    f = loadfile('foo.lua', 't', env)
-    is(env.foo, nil, "function loadfile")
-    f()
-    is(env.foo('ok'), 'ok')
-end
+env = {}
+f = loadfile('foo.lua', 't', env)
+is(env.foo, nil, "function loadfile")
+f()
+is(env.foo('ok'), 'ok')
 
 os.remove('foo.lua') -- clean up
 
@@ -362,15 +354,11 @@ is(rawequal(t, 2), false)
 is(rawequal(print, format), false)
 is(rawequal(print, 2), false)
 
-if arg[-1] == 'luajit' then
-    skip("LuaJIT TODO. rawlen", 3)
-else
-    is(rawlen("text"), 4, "function rawlen (string)")
-    is(rawlen({ 'a', 'b', 'c'}), 3, "function rawlen (table)")
-    error_like(function () a = rawlen(true) end,
-               "^[^:]+:%d+: bad argument #1 to 'rawlen' %(table or string expected%)",
-               "function rawlen (bad arg)")
-end
+is(rawlen("text"), 4, "function rawlen (string)")
+is(rawlen({ 'a', 'b', 'c'}), 3, "function rawlen (table)")
+error_like(function () a = rawlen(true) end,
+           "^[^:]+:%d+: bad argument #1 to 'rawlen' %(table ",
+           "function rawlen (bad arg)")
 
 t = {a = 'letter a', b = 'letter b'}
 is(rawget(t, 'a'), 'letter a', "function rawget")

@@ -256,12 +256,8 @@ end
 is(c1 < c2, true, "cplx __lt")
 is(c1 < c3, false)
 is(c1 <= c3, true)
-if arg[-1] == 'luajit' then
-    skip("LuaJIT TODO. __lt mixed", 2)
-else
-    is(c1 < 1, false)
-    is(c1 < 4, true)
-end
+is(c1 < 1, false)
+is(c1 < 4, true)
 
 function Cplx.mt.__le (a, b)
     if type(a) ~= 'table' then
