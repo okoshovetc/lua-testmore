@@ -2,7 +2,7 @@
 --
 -- lua-TestMore : <http://fperrad.github.com/lua-TestMore/>
 --
--- Copyright (C) 2010-2011, Perrad Francois
+-- Copyright (C) 2010-2012, Perrad Francois
 --
 -- This code is licensed under the terms of the MIT/X11 license,
 -- like Lua itself.

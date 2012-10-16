@@ -2,7 +2,7 @@
 --
 -- lua-TestMore : <http://fperrad.github.com/lua-TestMore/>
 --
--- Copyright (C) 2009-2011, Perrad Francois
+-- Copyright (C) 2009-2012, Perrad Francois
 --
 -- This code is licensed under the terms of the MIT/X11 license,
 -- like Lua itself.
@@ -70,9 +70,6 @@ eq_array({math.frexp(1.5)}, {0.75, 1}, "function frexp")
 is(math.ldexp(1.2, 3), 9.6, "function ldexp")
 
 like(math.log(47), '^3%.85', "function log")
-if arg[-1] == 'luajit' then
-    todo("LuaJIT TODO. log with base.", 2)
-end
 like(math.log(47, 2), '^5%.554', "function log (base 2)")
 like(math.log(47, 10), '^1%.672', "function log (base 10)")
 
