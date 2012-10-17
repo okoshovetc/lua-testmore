@@ -2,7 +2,7 @@
 --
 -- lua-TestMore : <http://fperrad.github.com/lua-TestMore/>
 --
--- Copyright (C) 2009, Perrad Francois
+-- Copyright (C) 2009-2012, Perrad Francois
 --
 -- This code is licensed under the terms of the MIT/X11 license,
 -- like Lua itself.
@@ -368,7 +368,7 @@ is(tostring(nil), 'nil')
 is(tostring(true), 'true')
 is(tostring(false), 'false')
 like(tostring({}), '^table: 0?[Xx]?%x+$')
-like(tostring(print), '^function: 0?[Xx]?[fast]*#?%x+$')
+like(tostring(print), '^function: 0?[Xx]?[builtin]*#?%x+$')
 
 error_like(function () tostring() end,
            "^[^:]+:%d+: bad argument #1 to 'tostring' %(value expected%)",
