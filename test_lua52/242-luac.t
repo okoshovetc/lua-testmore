@@ -32,7 +32,7 @@ if arg[-1] == 'luajit' then
 end
 
 local lua = (platform and platform.lua) or arg[-1]
-local luac = lua .. 'c'
+local luac = (platform and platform.luac) or lua .. 'c'
 
 if not pcall(io.popen, lua .. [[ -e "a=1"]]) then
     skip_all "io.popen not supported"

@@ -28,6 +28,7 @@ L<http://www.lua.org/manual/5.2/manual.html#7>.
 require 'Test.More'
 
 local lua = (platform and platform.lua) or arg[-1]
+local luac = (platform and platform.luac) or lua .. 'c'
 
 if not pcall(io.popen, lua .. [[ -e "a=1"]]) then
     skip_all "io.popen not supported"
@@ -55,7 +56,7 @@ f:close()
 if arg[-1] == 'luajit' then
     os.execute(lua .. " -b hello.lua hello.luac")
 else
-    os.execute(lua .. "c -s -o hello.luac hello.lua")
+    os.execute(luac .. " -s -o hello.luac hello.lua")
 end
 cmd = lua .. " hello.luac"
 f = io.popen(cmd)
@@ -66,7 +67,7 @@ os.remove('hello.luac') -- clean up
 if arg[-1] == 'luajit' then
     skip("LuaJIT intentional. cannot combine sources", 2)
 else
-    os.execute(lua .. "c -s -o hello2.luac hello.lua hello.lua")
+    os.execute(luac .. " -s -o hello2.luac hello.lua hello.lua")
     cmd = lua .. " hello2.luac"
     f = io.popen(cmd)
     is(f:read'*l', 'Hello World', "combine 1")

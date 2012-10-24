@@ -1,7 +1,11 @@
 # nmake /F makefile.mak
 
-LUA = lua
+LUAJIT = luajit.exe
+LUA = lua.exe
+LUAC = luac.exe
 
+RUN_LUA = $(LUA)
+RUN_LUAC = $(LUAC)
 OSNAME = MSWin32
 ARCHNAME = MSWin32-x86-multi-thread
 INTSIZE = 4
@@ -20,7 +24,7 @@ llvm-lua: env
 
 env:
 	@set LUA_PATH=;;../src/?.lua
-	@set LUA_INIT=platform = { lua=[[$(LUA)]], osname=[[$(OSNAME)]], intsize=$(INTSIZE), compat=true }
+	@set LUA_INIT=platform = { lua=[[$(RUN_LUA)]], luac=[[$(RUN_LUAC)]], osname=[[$(OSNAME)]], intsize=$(INTSIZE), compat=true }
 
 upload_pl = \
 use strict; \

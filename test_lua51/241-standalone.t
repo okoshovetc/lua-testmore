@@ -28,6 +28,7 @@ L<http://www.lua.org/manual/5.1/manual.html#6>.
 require 'Test.More'
 
 local lua = (platform and platform.lua) or arg[-1]
+local luac = (platform and platform.luac) or lua .. 'c'
 
 if not pcall(io.popen, lua .. [[ -e "a=1"]]) then
     skip_all "io.popen not supported"
@@ -49,7 +50,7 @@ f:close()
 if arg[-1] == 'luajit' then
     os.execute(lua .. " -b hello.lua hello.luac")
 else
-    os.execute(lua .. "c -o hello.luac hello.lua")
+    os.execute(luac .. " -o hello.luac hello.lua")
 end
 cmd = lua .. " hello.luac"
 f = io.popen(cmd)
