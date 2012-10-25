@@ -31,6 +31,8 @@ See "Programming in Lua", section 21 "The I/O Library".
 
 require 'Test.More'
 
+local lua = (platform and platform.lua) or arg[-1]
+
 plan(65)
 
 like(io.stdin, '^file %(0?[Xx]?%x+%)$', "variable stdin")
@@ -91,7 +93,7 @@ like(io.output('output.new'), '^file %(0?[Xx]?%x+%)$')
 is(f, io.output(f))
 os.remove('output.new')
 
-r, f = pcall(io.popen, [[perl -e "print 'standard output'"]])
+r, f = pcall(io.popen, lua .. [[ -e "print 'standard output'"]])
 if r then
     is(io.type(f), 'file', "popen (read)")
     is(f:read(), "standard output")
@@ -100,7 +102,7 @@ else
     skip("io.popen not supported", 3)
 end
 
-r, f = pcall(io.popen, [[perl -pe "s/e/a/"]], 'w')
+r, f = pcall(io.popen, lua .. [[ -e "for line in io.lines() do print((line:gsub('e', 'a'))) end"]], 'w')
 if r then
     is(io.type(f), 'file', "popen (write)")
     f:write("# hello\n") -- not tested : hallo

@@ -14,7 +14,7 @@
 
 =head2 Synopsis
 
-    % perl t/standalone.t
+    % prove t/standalone.t
 
 =head2 Description
 
