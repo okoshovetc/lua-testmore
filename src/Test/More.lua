@@ -187,11 +187,13 @@ function m.is_deeply (got, expected, name)
     end
     local msg1
     local msg2
+    local seen = {}
 
     local function deep_eq (t1, t2, key_path)
-        if t1 == t2 then
+        if t1 == t2 or seen[t1] then
             return true
         end
+        seen[t1] = true
         for k, v2 in pairs(t2) do
             local v1 = t1[k]
             if type(v1) == 'table' and type(v2) == 'table' then

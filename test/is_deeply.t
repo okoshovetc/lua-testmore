@@ -2,7 +2,7 @@
 
 require 'Test.More'
 require 'Test.Builder.Tester'
-plan(7)
+plan(8)
 
 t = {
     a = 1,
@@ -72,3 +72,13 @@ test_diag "         got.d.2: y"
 test_diag "    expected.d.2: w"
 is_deeply( t, {a=1, b='text', c=true, d={'x','w','z'}}, "key d.2 differents" )
 test_test "fail is_deeply (recursif)"
+
+
+local t = {}
+t.foo = t
+local a = {}
+a.foo = a
+test_out "ok 1 - direct cycle"
+is_deeply( t, a, "direct cycle" )
+test_test "ok is_deeply (direct cycle)"
+
