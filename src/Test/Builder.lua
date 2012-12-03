@@ -25,30 +25,30 @@ function m.puts (f, str)
     f:write(str)
 end
 
-local function _print (self, ...)
-    local f = self:output()
+local function _print_to_fh (self, f, ...)
     if f then
-        local msg = table.concat({..., "\n"})
-        m.puts(f, msg)
+        local msg = table.concat({...})
+        msg:gsub("\n", "\n" .. self.indent)
+        m.puts(f, self.indent .. msg .. "\n")
     else
-        print(...)
+        print(self.indent, ...)
     end
 end
 
-local function print_comment (f, ...)
-    if f then
-        local arg = {...}
-        for k, v in pairs(arg) do
-            arg[k] = tostring(v)
-        end
-        local msg = table.concat(arg)
-        msg = msg:gsub("\n", "\n# ")
-        msg = msg:gsub("\n# \n", "\n#\n")
-        msg = msg:gsub("\n# $", '')
-        m.puts(f, "# " .. msg .. "\n")
-    else
-        print("# ", ...)
+local function _print (self, ...)
+    _print_to_fh(self, self:output(), ...)
+end
+
+local function print_comment (self, f, ...)
+    local arg = {...}
+    for k, v in pairs(arg) do
+        arg[k] = tostring(v)
     end
+    local msg = table.concat(arg)
+    msg = msg:gsub("\n", "\n# ")
+    msg = msg:gsub("\n# \n", "\n#\n")
+    msg = msg:gsub("\n# $", '')
+    _print_to_fh(self, f, "# ", msg)
 end
 
 function m:create ()
@@ -76,6 +76,7 @@ function m:reset ()
     self.have_plan = false
     self.no_plan = false
     self.have_output_plan = false
+    self.indent = ''
 end
 
 local function _output_plan (self, max, directive, reason)
@@ -267,11 +268,11 @@ local function diag_file (self)
 end
 
 function m:diag (...)
-    print_comment(diag_file(self), ...)
+    print_comment(self, diag_file(self), ...)
 end
 
 function m:note (...)
-    print_comment(self:output(), ...)
+    print_comment(self, self:output(), ...)
 end
 
 function m:output (f)
@@ -303,7 +304,7 @@ end
 
 return m
 --
--- Copyright (c) 2009-2011 Francois Perrad
+-- Copyright (c) 2009-2012 Francois Perrad
 --
 -- This library is licensed under the terms of the MIT/X11 license,
 -- like Lua itself.
