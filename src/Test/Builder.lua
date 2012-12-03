@@ -54,7 +54,6 @@ end
 function m.create ()
     local o = setmetatable({}, { __index = m })
     o:reset()
-    o:reset_outputs()
     return o
 end
 
@@ -75,9 +74,13 @@ function m:reset ()
     self.no_plan = false
     self.have_output_plan = false
     self.indent = ''
+    self:reset_outputs()
 end
 
 local function _output_plan (self, max, directive, reason)
+    if self.have_output_plan then
+        error("The plan was already output")
+    end
     local out = "1.." .. max
     if directive then
         out = out .. " # " .. directive
@@ -110,6 +113,9 @@ function m:plan (arg)
 end
 
 function m:done_testing (num_tests)
+    if num_tests then
+        self.no_plan = false
+    end
     num_tests = num_tests or self.curr_test
     if self._done_testing then
         tb:ok(false, "done_testing() was already called")
@@ -193,10 +199,7 @@ function m:ok (test, name, level)
     end
     _print(self, out)
     if not test then
-        local msg = "Failed"
-        if in_todo(self) then
-            msg = msg .. " (TODO)"
-        end
+        local msg = in_todo(self) and "Failed (TODO)" or "Failed"
         if debug then
             local info = debug.getinfo(3 + level)
             local file = info.short_src
@@ -234,15 +237,12 @@ function m:todo (reason, count)
     self.todo_reason = reason
 end
 
-function m:skip (reason, count)
-    count = count or 1
+function m:skip (reason)
     local name = "# skip"
     if reason then
         name = name .. " " .. reason
     end
-    for i = 1, count do
-        self:ok(true, name)
-    end
+    self:ok(true, name, 1)
 end
 
 function m:todo_skip (reason)
@@ -254,7 +254,9 @@ function m:todo_skip (reason)
 end
 
 function m:skip_rest (reason)
-    self:skip(reason, self.expected_tests - self.curr_test)
+    for i = self.curr_test, self.expected_tests do
+        tb:skip(reason)
+    end
 end
 
 local function diag_file (self)
