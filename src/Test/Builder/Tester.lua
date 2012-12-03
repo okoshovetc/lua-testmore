@@ -5,14 +5,13 @@
 
 local error = error
 local pairs = pairs
-local setmetatable = setmetatable
 local type = type
 local _G = _G
 local debug = require 'debug'
 
-local tb  = require 'Test.Builder':new()
-local out = require 'Test.Builder.Tester.File':new 'out'
-local err = require 'Test.Builder.Tester.File':new 'err'
+local tb  = require 'Test.Builder'.new()
+local out = require 'Test.Builder.Tester.File'.new 'out'
+local err = require 'Test.Builder.Tester.File'.new 'err'
 
 _ENV = nil
 local m = {}
@@ -134,7 +133,7 @@ end
 return m
 
 --
--- Copyright (c) 2009 Francois Perrad
+-- Copyright (c) 2009-2012 Francois Perrad
 --
 -- This library is licensed under the terms of the MIT/X11 license,
 -- like Lua itself.

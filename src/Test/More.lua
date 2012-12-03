@@ -12,7 +12,7 @@ local type = type
 local unpack = require 'table'.unpack or unpack
 local _G = _G
 
-local tb = require 'Test.Builder':new()
+local tb = require 'Test.Builder'.new()
 
 _ENV = nil
 local m = {}

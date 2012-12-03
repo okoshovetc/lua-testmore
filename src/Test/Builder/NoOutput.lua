@@ -10,8 +10,8 @@ local require = require
 _ENV = nil
 local m = {}
 
-function m:create ()
-    local tb = require 'Test.Builder':create()
+function m.create ()
+    local tb = require 'Test.Builder'.create()
     tb:output(io.tmpfile())
     tb:failure_output(io.tmpfile())
     tb:todo_output(io.tmpfile())
@@ -53,7 +53,7 @@ end
 
 return m
 --
--- Copyright (c) 2009-2010 Francois Perrad
+-- Copyright (c) 2009-2012 Francois Perrad
 --
 -- This library is licensed under the terms of the MIT/X11 license,
 -- like Lua itself.

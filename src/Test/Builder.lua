@@ -51,18 +51,16 @@ local function print_comment (self, f, ...)
     _print_to_fh(self, f, "# ", msg)
 end
 
-function m:create ()
-    local o = {}
-    setmetatable(o, self)
-    self.__index = self
+function m.create ()
+    local o = setmetatable({}, { __index = m })
     o:reset()
     o:reset_outputs()
     return o
 end
 
 local test
-function m:new ()
-    test = test or self:create()
+function m.new ()
+    test = test or m.create()
     return test
 end
 
