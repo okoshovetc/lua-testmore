@@ -128,6 +128,10 @@ function m.type_ok (val, t, name)
     end
 end
 
+function m.subtest (name, func)
+    tb:subtest(name, func)
+end
+
 function m.pass (name)
     tb:ok(true, name)
 end

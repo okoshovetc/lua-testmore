@@ -99,11 +99,11 @@ rockspec: $(TARBALL)
 check: test
 
 test:
-	cd src && prove --exec=$(LUA) ../test/*.t
+	cd src && prove --exec=$(LUA) ../test/*.t ../test/subtest/*.t
 
 coverage:
 	rm -f src/luacov.stats.out src/luacov.report.out
-	cd src && prove --exec="$(LUA) -lluacov" ../test/*.t
+	cd src && prove --exec="$(LUA) -lluacov" ../test/*.t ../test/subtest/*.t
 	cd src && luacov
 
 README.html: README.md
