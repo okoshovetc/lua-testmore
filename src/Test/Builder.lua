@@ -237,7 +237,7 @@ function m:skip_all (reason)
     self._skip_all = reason
     _output_plan(self, 0, 'SKIP', reason)
     if self.parent then
-        error("skip_all in child")
+        error("skip_all in child", 0)
     end
     os.exit(0)
 end

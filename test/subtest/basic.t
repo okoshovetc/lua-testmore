@@ -137,7 +137,7 @@ do
                                 child:skip_all'cuz I said so'
                          end)
     nok(r)
-    like(msg, "skip_all in child")
+    is(msg, "skip_all in child")
 end
 
 local tb = require 'Test.Builder.NoOutput'.create()
