@@ -2,7 +2,7 @@
 --
 -- lua-TestMore : <http://fperrad.github.com/lua-TestMore/>
 --
--- Copyright (C) 2009-2011, Perrad Francois
+-- Copyright (C) 2009-2012, Perrad Francois
 --
 -- This code is licensed under the terms of the MIT/X11 license,
 -- like Lua itself.
@@ -91,21 +91,17 @@ else
     skip("maxn (removed)", 3)
 end
 
-if arg[-1] == 'luajit' then
-    skip("LuaJIT TODO. pack", 4)
-else
-    t = table.pack("abc", "def", "ghi")
-    eq_array(t, {
-        "abc",
-        "def",
-        "ghi"
-    }, "function pack")
-    is(t.n, 3)
+t = table.pack("abc", "def", "ghi")
+eq_array(t, {
+    "abc",
+    "def",
+    "ghi"
+}, "function pack")
+is(t.n, 3)
 
-    t = table.pack()
-    eq_array(t, {}, "function pack (no element)")
-    is(t.n, 0)
-end
+t = table.pack()
+eq_array(t, {}, "function pack (no element)")
+is(t.n, 0)
 
 t = {}
 a = table.remove(t)

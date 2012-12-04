@@ -27,7 +27,7 @@ L<http://www.lua.org/manual/5.2/manual.html#3.1>.
 
 require 'Test.More'
 
-plan(37)
+plan(40)
 
 is("\65", "A")
 is("\065", "A")
@@ -96,6 +96,9 @@ is(314.16e-2, 3.1416)
 is(0.31416E1, 3.1416)
 is(0xff, 255)
 is(0x56, 86)
+is(0x0.1E, 0x1E / 0x100)        -- 0.1171875
+is(0xA23p-4, 0xA23 / (2^4))     -- 162.1875
+is(0X1.921FB54442D18P+1, (1 + 0x921FB54442D18/0x10000000000000) * 2)
 
 f, msg = load [[a = 12e34e56]]
 like(msg, "^[^:]+:%d+: malformed number near")

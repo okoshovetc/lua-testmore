@@ -2,25 +2,23 @@
 LUA     := lua
 VERSION := $(shell cd src && $(LUA) -e "m = require [[Test.More]]; print(m._VERSION)")
 TARBALL := lua-testmore-$(VERSION).tar.gz
-ifndef REV
-  REV   := 1
-endif
+REV     := 1
 
 LUAVER  := 5.1
 PREFIX  := /usr/local
 DPREFIX := $(DESTDIR)$(PREFIX)
 LIBDIR  := $(DPREFIX)/share/lua/$(LUAVER)
+INSTALL := install
 
 all: dist.cmake
 	@echo "Nothing to build here, you can just make install"
 
 install:
-	mkdir -p $(LIBDIR)/Test/Builder/Tester
-	cp src/Test/More.lua                    $(LIBDIR)/Test
-	cp src/Test/Builder.lua                 $(LIBDIR)/Test
-	cp src/Test/Builder/SocketOutput.lua    $(LIBDIR)/Test/Builder
-	cp src/Test/Builder/Tester.lua          $(LIBDIR)/Test/Builder
-	cp src/Test/Builder/Tester/File.lua     $(LIBDIR)/Test/Builder/Tester
+	$(INSTALL) -m 644 -D src/Test/More.lua                  $(LIBDIR)/Test/More.lua
+	$(INSTALL) -m 644 -D src/Test/Builder.lua               $(LIBDIR)/Test/Builder.lua
+	$(INSTALL) -m 644 -D src/Test/Builder/SocketOutput.lua  $(LIBDIR)/Test/Builder/SocketOutput.lua
+	$(INSTALL) -m 644 -D src/Test/Builder/Tester.lua        $(LIBDIR)/Test/Builder/Tester.lua
+	$(INSTALL) -m 644 -D src/Test/Builder/Tester/File.lua   $(LIBDIR)/Test/Builder/Tester/File.lua
 
 uninstall:
 	rm -f $(LIBDIR)/Test/More.lua
@@ -101,11 +99,11 @@ rockspec: $(TARBALL)
 check: test
 
 test:
-	cd src && prove --exec=$(LUA) ../test/*.t
+	cd src && prove --exec=$(LUA) ../test/*.t ../test/subtest/*.t
 
 coverage:
 	rm -f src/luacov.stats.out src/luacov.report.out
-	cd src && prove --exec="$(LUA) -lluacov" ../test/*.t
+	cd src && prove --exec="$(LUA) -lluacov" ../test/*.t ../test/subtest/*.t
 	cd src && luacov
 
 README.html: README.md

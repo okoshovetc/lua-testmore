@@ -2,7 +2,7 @@
 --
 -- lua-TestMore : <http://fperrad.github.com/lua-TestMore/>
 --
--- Copyright (C) 2009-2011, Perrad Francois
+-- Copyright (C) 2009-2012, Perrad Francois
 --
 -- This code is licensed under the terms of the MIT/X11 license,
 -- like Lua itself.
@@ -65,13 +65,9 @@ error_like(function () debug.getlocal(42, 1) end,
            "bad argument #1 to 'getlocal' %(level out of range%)",
            "function getlocal (out of range)")
 
-if arg[-1] == 'luajit' then
-    skip("LuaJIT: getlocal (func)", 2)
-else
-    local name, value = debug.getlocal(like, 1)
-    type_ok(name, 'string', "function getlocal (func)")
-    is(value, nil)
-end
+local name, value = debug.getlocal(like, 1)
+type_ok(name, 'string', "function getlocal (func)")
+is(value, nil)
 
 t = {}
 is(debug.getmetatable(t), nil, "function getmetatable")
@@ -127,9 +123,6 @@ error_like(function () debug.setlocal(42, 1, true) end,
 
 t = {}
 t1 = {}
-if arg[-1] == 'luajit' then
-    todo("LuaJIT TODO. debug.setmetatable", 1)
-end
 is(debug.setmetatable(t, t1), t, "function setmetatable")
 is(getmetatable(t), t1)
 
@@ -142,26 +135,26 @@ type_ok(name, 'string', "function setupvalue")
 local name = debug.setupvalue(plan, 42, true)
 is(name, nil)
 
+local u = io.tmpfile()
+local old = debug.getuservalue(u)
 if arg[-1] == 'luajit' then
-    skip("LuaJIT: setuservalue", 7)
+    type_ok(old, 'table', "function getuservalue")
 else
-    local u = io.tmpfile()
-    local old = debug.getuservalue(u)
     is(old, nil, "function getuservalue")
-    is(debug.getuservalue(true), nil)
-    local data = {}
-    r = debug.setuservalue(u, data)
-    is(r, u, "function setuservalue")
-    is(debug.getuservalue(u), data)
-    r = debug.setuservalue(u, old)
-    is(debug.getuservalue(u), old)
-
-    error_like(function () debug.setuservalue({}, data) end,
-               "^[^:]+:%d+: bad argument #1 to 'setuservalue' %(userdata expected, got table%)")
-
-    error_like(function () debug.setuservalue(u, true) end,
-               "^[^:]+:%d+: bad argument #2 to 'setuservalue' %(table expected, got boolean%)")
 end
+is(debug.getuservalue(true), nil)
+local data = {}
+r = debug.setuservalue(u, data)
+is(r, u, "function setuservalue")
+is(debug.getuservalue(u), data)
+r = debug.setuservalue(u, old)
+is(debug.getuservalue(u), old)
+
+error_like(function () debug.setuservalue({}, data) end,
+           "^[^:]+:%d+: bad argument #1 to 'setuservalue' %(userdata expected, got table%)")
+
+error_like(function () debug.setuservalue(u, true) end,
+           "^[^:]+:%d+: bad argument #2 to 'setuservalue' %(table expected, got boolean%)")
 
 like(debug.traceback(), "^stack traceback:\n", "function traceback")
 
@@ -169,26 +162,18 @@ like(debug.traceback("message\n"), "^message\n\nstack traceback:\n", "function t
 
 like(debug.traceback(false), "false", "function traceback")
 
-if arg[-1] == 'luajit' then
-    skip("LuaJIT: upvalueid", 1)
-else
-    local id = debug.upvalueid(plan, 1)
-    type_ok(id, 'userdata', "function upvalueid")
-end
+local id = debug.upvalueid(plan, 1)
+type_ok(id, 'userdata', "function upvalueid")
 
-if arg[-1] == 'luajit' then
-    skip("LuaJIT: upvaluejoin", 2)
-else
-    debug.upvaluejoin (pass, 1, fail, 1)
+debug.upvaluejoin (pass, 1, fail, 1)
 
-    error_like(function () debug.upvaluejoin(true, 1, nil, 1) end,
-               "bad argument #1 to 'upvaluejoin' %(function expected, got boolean%)",
-               "function upvaluejoin (bad arg)")
+error_like(function () debug.upvaluejoin(true, 1, nil, 1) end,
+           "bad argument #1 to 'upvaluejoin' %(function expected, got boolean%)",
+           "function upvaluejoin (bad arg)")
 
-    error_like(function () debug.upvaluejoin(pass, 1, true, 1) end,
-               "bad argument #3 to 'upvaluejoin' %(function expected, got boolean%)",
-               "function upvaluejoin (bad arg)")
-end
+error_like(function () debug.upvaluejoin(pass, 1, true, 1) end,
+           "bad argument #3 to 'upvaluejoin' %(function expected, got boolean%)",
+           "function upvaluejoin (bad arg)")
 
 -- Local Variables:
 --   mode: lua

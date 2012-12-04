@@ -31,6 +31,8 @@ See "Programming in Lua", section 21 "The I/O Library".
 
 require 'Test.More'
 
+local lua = (platform and platform.lua) or arg[-1]
+
 plan(61)
 
 is(getfenv(io.lines), _G, "environment")
@@ -57,7 +59,7 @@ is(io.flush(), true, "function flush")
 os.remove('file.no')
 f, msg = io.open("file.no")
 is(f, nil, "function open")
-is(msg, "file.no: No such file or directory")
+like(msg, "^file.no: ")
 
 os.remove('file.txt')
 f = io.open('file.txt', 'w')
@@ -91,15 +93,23 @@ like(io.output('output.new'), '^file %(0?[Xx]?%x+%)$')
 is(f, io.output(f))
 os.remove('output.new')
 
-f = io.popen([[perl -e "print 'standard output'"]])
-is(io.type(f), 'file', "popen (read)")
-is(f:read(), "standard output")
-io.close(f)
+r, f = pcall(io.popen, lua .. [[ -e "print 'standard output'"]])
+if r then
+    is(io.type(f), 'file', "popen (read)")
+    is(f:read(), "standard output")
+    io.close(f)
+else
+    skip("io.popen not supported", 2)
+end
 
-f = io.popen([[perl -pe "s/e/a/"]], 'w')
-is(io.type(f), 'file', "popen (write)")
-f:write("# hello\n") -- not tested : hallo
-f:close()
+r, f = pcall(io.popen, lua .. [[ -e "for line in io.lines() do print((line:gsub('e', 'a'))) end"]], 'w')
+if r then
+    is(io.type(f), 'file', "popen (write)")
+    f:write("# hello\n") -- not tested : hallo
+    f:close()
+else
+    skip("io.popen not supported", 1)
+end
 
 for line in io.lines('file.txt') do
     is(line, "file with text", "function lines(filename)")

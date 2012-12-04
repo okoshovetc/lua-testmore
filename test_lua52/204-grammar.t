@@ -2,7 +2,7 @@
 --
 -- lua-TestMore : <http://fperrad.github.com/lua-TestMore/>
 --
--- Copyright (C) 2010-2011, Perrad Francois
+-- Copyright (C) 2010-2012, Perrad Francois
 --
 -- This code is licensed under the terms of the MIT/X11 license,
 -- like Lua itself.
@@ -50,9 +50,6 @@ else
     like(msg, "^[^:]+:%d+: <break> at line 5 not inside a loop", "orphan break")
 end
 
-if arg[-1] == 'luajit' then
-    todo("LuaJIT TODO. break", 1)
-end
 --[[ break anywhere ]]
 lives_ok( [[
 function f()
@@ -67,21 +64,26 @@ end
 ]], "break anywhere")
 
 --[[ goto ]]
-if arg[-1] == 'luajit' then
-    todo("LuaJIT TODO. goto", 3)
-end
 f, msg = load [[
 ::label::
 goto unknown
 ]]
-like(msg, ":%d+: no visible label 'unknown' for <goto> at line %d+", "unknown goto")
+if arg[-1] == 'luajit' then
+    like(msg, ":%d+: undefined label 'unknown'", "unknown goto")
+else
+    like(msg, ":%d+: no visible label 'unknown' for <goto> at line %d+", "unknown goto")
+end
 
 f, msg = load [[
 ::label::
 goto label
 ::label::
 ]]
-like(msg, ":%d+: label 'label' already defined on line %d+", "repeated label")
+if arg[-1] == 'luajit' then
+    like(msg, ":%d+: duplicate label 'label'", "duplicate label")
+else
+    like(msg, ":%d+: label 'label' already defined on line %d+", "duplicate label")
+end
 
 f, msg = load [[
 ::e::
@@ -90,7 +92,11 @@ local x
 ::f::
 goto e
 ]]
-like(msg, ":%d+: <goto f> at line %d+ jumps into the scope of local 'x'", "bad goto")
+if arg[-1] == 'luajit' then
+    like(msg, ":%d+: <goto f> jumps into the scope of local 'x'", "bad goto")
+else
+    like(msg, ":%d+: <goto f> at line %d+ jumps into the scope of local 'x'", "bad goto")
+end
 
 -- Local Variables:
 --   mode: lua

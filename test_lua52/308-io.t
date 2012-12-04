@@ -2,7 +2,7 @@
 --
 -- lua-TestMore : <http://fperrad.github.com/lua-TestMore/>
 --
--- Copyright (C) 2009-2010, Perrad Francois
+-- Copyright (C) 2009-2012, Perrad Francois
 --
 -- This code is licensed under the terms of the MIT/X11 license,
 -- like Lua itself.
@@ -30,6 +30,8 @@ See "Programming in Lua", section 21 "The I/O Library".
 --]]
 
 require 'Test.More'
+
+local lua = (platform and platform.lua) or arg[-1]
 
 plan(65)
 
@@ -91,15 +93,23 @@ like(io.output('output.new'), '^file %(0?[Xx]?%x+%)$')
 is(f, io.output(f))
 os.remove('output.new')
 
-f = io.popen([[perl -e "print 'standard output'"]])
-is(io.type(f), 'file', "popen (read)")
-is(f:read(), "standard output")
-is(io.close(f), true)
+r, f = pcall(io.popen, lua .. [[ -e "print 'standard output'"]])
+if r then
+    is(io.type(f), 'file', "popen (read)")
+    is(f:read(), "standard output")
+    is(io.close(f), true)
+else
+    skip("io.popen not supported", 3)
+end
 
-f = io.popen([[perl -pe "s/e/a/"]], 'w')
-is(io.type(f), 'file', "popen (write)")
-f:write("# hello\n") -- not tested : hallo
-is(io.close(f), true)
+r, f = pcall(io.popen, lua .. [[ -e "for line in io.lines() do print((line:gsub('e', 'a'))) end"]], 'w')
+if r then
+    is(io.type(f), 'file', "popen (write)")
+    f:write("# hello\n") -- not tested : hallo
+    is(io.close(f), true)
+else
+    skip("io.popen not supported", 2)
+end
 
 for line in io.lines('file.txt') do
     is(line, "file with text", "function lines(filename)")
@@ -218,12 +228,7 @@ error_like(function () f:write('end') end,
            "method write (closed)")
 
 f = io.open('file.out', 'w')
-if arg[-1] == 'luajit' then
-    is(f:write('end'), true, "method write")
-    diag("LuaJIT TODO. write")
-else
-    is(f:write('end'), f, "method write")
-end
+is(f:write('end'), f, "method write")
 f:close()
 
 os.remove('file.out') --clean up

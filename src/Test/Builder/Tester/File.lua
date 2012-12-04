@@ -6,17 +6,13 @@
 local tconcat = require 'table'.concat
 local setmetatable = setmetatable
 
-local tb = require 'Test.Builder':new()
+local tb = require 'Test.Builder'.new()
 
 _ENV = nil
 local m = {}
 
-function m:new (_type)
-    local o = {
-        type = _type
-    }
-    setmetatable(o, self)
-    self.__index = self
+function m.new (_type)
+    local o = setmetatable({ type = _type }, { __index = m })
     o:reset()
     return o
 end
@@ -63,7 +59,7 @@ end
 
 return m
 --
--- Copyright (c) 2009-2010 Francois Perrad
+-- Copyright (c) 2009-2012 Francois Perrad
 --
 -- This library is licensed under the terms of the MIT/X11 license,
 -- like Lua itself.

@@ -12,7 +12,7 @@ local type = type
 local unpack = require 'table'.unpack or unpack
 local _G = _G
 
-local tb = require 'Test.Builder':new()
+local tb = require 'Test.Builder'.new()
 
 _ENV = nil
 local m = {}
@@ -128,6 +128,10 @@ function m.type_ok (val, t, name)
     end
 end
 
+function m.subtest (name, func)
+    tb:subtest(name, func)
+end
+
 function m.pass (name)
     tb:ok(true, name)
 end
@@ -187,11 +191,13 @@ function m.is_deeply (got, expected, name)
     end
     local msg1
     local msg2
+    local seen = {}
 
     local function deep_eq (t1, t2, key_path)
-        if t1 == t2 then
+        if t1 == t2 or seen[t1] then
             return true
         end
+        seen[t1] = true
         for k, v2 in pairs(t2) do
             local v1 = t1[k]
             if type(v1) == 'table' and type(v2) == 'table' then
@@ -341,11 +347,17 @@ function m.note (msg)
 end
 
 function m.skip (reason, count)
-    tb:skip(reason, count)
+    count = count or 1
+    for i = 1, count do
+        tb:skip(reason)
+    end
 end
 
-function m.todo_skip (reason)
-    tb:todo_skip(reason)
+function m.todo_skip (reason, count)
+    count = count or 1
+    for i = 1, count do
+        tb:todo_skip(reason)
+    end
 end
 
 function m.skip_rest (reason)

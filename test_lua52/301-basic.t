@@ -2,7 +2,7 @@
 --
 -- lua-TestMore : <http://fperrad.github.com/lua-TestMore/>
 --
--- Copyright (C) 2009-2011, Perrad Francois
+-- Copyright (C) 2009-2012, Perrad Francois
 --
 -- This code is licensed under the terms of the MIT/X11 license,
 -- like Lua itself.
@@ -196,33 +196,26 @@ f()
 is(bar('ok'), 'ok')
 bar = nil
 
-if arg[-1] == 'luajit' then
-    skip("LuaJIT. load with env", 2)
-else
-    env = {}
-    f = load([[
+env = {}
+f = load([[
 function bar (x)
     return x
 end
 ]], "from string", 't', env)
-    is(env.bar, nil, "function load(str)")
-    f()
-    is(env.bar('ok'), 'ok')
-end
+is(env.bar, nil, "function load(str)")
+f()
+is(env.bar('ok'), 'ok')
 
 f, msg = load([[?syntax error?]], "errorchunk")
 is(f, nil, "function load(syntax error)")
 like(msg, "^%[string \"errorchunk\"%]:%d+:")
 
-if arg[-1] == 'luajit' then
-    todo("LuaJIT TODO. mode", 3)
-end
 f, msg = load([[print 'ok']], "chunk txt", 'b')
-like(msg, "attempt to load a text chunk")
+like(msg, "attempt to load")
 is(f, nil, "mode")
 
 f, msg = load("\x1bLua", "chunk bin", 't')
-like(msg, "attempt to load a binary chunk")
+like(msg, "attempt to load")
 is(f, nil, "mode")
 
 f = io.open('foo.lua', 'w')
@@ -238,22 +231,15 @@ is(foo, nil, "function loadfile")
 f()
 is(foo('ok'), 'ok')
 
-if arg[-1] == 'luajit' then
-    todo("LuaJIT TODO. mode", 2)
-end
 f, msg = loadfile('foo.lua', 'b')
-like(msg, "attempt to load a text chunk")
+like(msg, "attempt to load")
 is(f, nil, "mode")
 
-if arg[-1] == 'luajit' then
-    skip("LuaJIT. loadfile with env", 2)
-else
-    env = {}
-    f = loadfile('foo.lua', 't', env)
-    is(env.foo, nil, "function loadfile")
-    f()
-    is(env.foo('ok'), 'ok')
-end
+env = {}
+f = loadfile('foo.lua', 't', env)
+is(env.foo, nil, "function loadfile")
+f()
+is(env.foo('ok'), 'ok')
 
 os.remove('foo.lua') -- clean up
 
@@ -368,15 +354,11 @@ is(rawequal(t, 2), false)
 is(rawequal(print, format), false)
 is(rawequal(print, 2), false)
 
-if arg[-1] == 'luajit' then
-    skip("LuaJIT TODO. rawlen", 3)
-else
-    is(rawlen("text"), 4, "function rawlen (string)")
-    is(rawlen({ 'a', 'b', 'c'}), 3, "function rawlen (table)")
-    error_like(function () a = rawlen(true) end,
-               "^[^:]+:%d+: bad argument #1 to 'rawlen' %(table or string expected%)",
-               "function rawlen (bad arg)")
-end
+is(rawlen("text"), 4, "function rawlen (string)")
+is(rawlen({ 'a', 'b', 'c'}), 3, "function rawlen (table)")
+error_like(function () a = rawlen(true) end,
+           "^[^:]+:%d+: bad argument #1 to 'rawlen' %(table ",
+           "function rawlen (bad arg)")
 
 t = {a = 'letter a', b = 'letter b'}
 is(rawget(t, 'a'), 'letter a', "function rawget")
@@ -454,7 +436,7 @@ is(tostring(nil), 'nil')
 is(tostring(true), 'true')
 is(tostring(false), 'false')
 like(tostring({}), '^table: 0?[Xx]?%x+$')
-like(tostring(print), '^function: 0?[Xx]?[fast]*#?%x+$')
+like(tostring(print), '^function: 0?[Xx]?[builtin]*#?%x+$')
 
 error_like(function () tostring() end,
            "^[^:]+:%d+: bad argument #1 to 'tostring' %(value expected%)",

@@ -28,6 +28,10 @@ require 'Test.More'
 
 local lua = (platform and platform.lua) or arg[-1]
 
+if not pcall(io.popen, lua .. [[ -e "a=1"]]) then
+    skip_all "io.popen not supported"
+end
+
 plan(12)
 
 f = io.open('lib1.lua', 'w')

@@ -2,7 +2,7 @@
 --
 -- lua-TestMore : <http://fperrad.github.com/lua-TestMore/>
 --
--- Copyright (C) 2009-2011, Perrad Francois
+-- Copyright (C) 2009-2012, Perrad Francois
 --
 -- This code is licensed under the terms of the MIT/X11 license,
 -- like Lua itself.
@@ -256,12 +256,8 @@ end
 is(c1 < c2, true, "cplx __lt")
 is(c1 < c3, false)
 is(c1 <= c3, true)
-if arg[-1] == 'luajit' then
-    skip("LuaJIT TODO. __lt mixed", 2)
-else
-    is(c1 < 1, false)
-    is(c1 < 4, true)
-end
+is(c1 < 1, false)
+is(c1 < 4, true)
 
 function Cplx.mt.__le (a, b)
     if type(a) ~= 'table' then

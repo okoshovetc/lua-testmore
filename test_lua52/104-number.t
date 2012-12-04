@@ -42,19 +42,11 @@ is(3.14 * 1, 3.14, "3.14 * 1")
 
 is(-7 / 0.5, -14, "-7 / 0.5")
 
-if platform and platform.osname == 'MSWin32' then
-    is(tostring(1 / 0), '1.#INF', "1 / 0")
-else
-    is(tostring(1 / 0), 'inf', "1 / 0")
-end
+type_ok(1 / 0, 'number', "1 / 0")
 
 is(-25 % 3, 2, "-25 % 3")
 
-if platform and platform.osname == 'MSWin32' then
-    is(tostring(1 % 0), '-1.#IND', "1 % 0")
-else
-    like(tostring(1 % 0), '^-?nan$', "1 % 0")
-end
+type_ok(1 % 0, 'number', "1 % 0")
 
 error_like(function () return 10 + true end,
            "^[^:]+:%d+: attempt to perform arithmetic on a boolean value",

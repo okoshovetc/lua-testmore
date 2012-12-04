@@ -2,7 +2,7 @@
 --
 -- lua-TestMore : <http://fperrad.github.com/lua-TestMore/>
 --
--- Copyright (C) 2009-2011, Perrad Francois
+-- Copyright (C) 2009-2012, Perrad Francois
 --
 -- This code is licensed under the terms of the MIT/X11 license,
 -- like Lua itself.
@@ -66,9 +66,6 @@ is(os.difftime(1234, 1200), 34, "function difftime")
 is(os.difftime(1234), 1234)
 
 r = os.execute()
-if arg[-1] == 'luajit' then
-    todo("LuaJIT TODO. execute", 8)
-end
 is(r, true, "function execute")
 
 cmd = lua .. [[ -e "print '# hello from external Lua'; os.exit(2)"]]
@@ -87,23 +84,28 @@ cmd = lua .. [[ -e "print '# hello from external Lua'; os.exit(true, true)"]]
 is(os.execute(cmd), true, "function execute & exit")
 
 cmd = lua .. [[ -e "print 'reached'; os.exit(); print 'not reached';"]]
-f = io.popen(cmd)
-is(f:read'*l', 'reached', "function exit")
-is(f:read'*l', nil)
-code = f:close()
-is(code, true, "exit code")
+r, f = pcall(io.popen, cmd)
+if r then
+    is(f:read'*l', 'reached', "function exit")
+    is(f:read'*l', nil)
+    code = f:close()
+    is(code, true, "exit code")
+else
+    skip("io.popen not supported", 3)
+end
 
 cmd = lua .. [[ -e "print 'reached'; os.exit(3); print 'not reached';"]]
-f = io.popen(cmd)
-is(f:read'*l', 'reached', "function exit")
-is(f:read'*l', nil)
-r, s, n = f:close()
-if arg[-1] == 'luajit' then
-    todo("LuaJIT TODO. pipe exit code.", 3)
+r, f = pcall(io.popen, cmd)
+if r then
+    is(f:read'*l', 'reached', "function exit")
+    is(f:read'*l', nil)
+    r, s, n = f:close()
+    is(r, nil)
+    is(s, 'exit', "exit code")
+    is(n, 3, "exit value")
+else
+    skip("io.popen not supported", 5)
 end
-is(r, nil)
-is(s, 'exit', "exit code")
-is(n, 3, "exit value")
 
 is(os.getenv('__IMPROBABLE__'), nil, "function getenv")
 

@@ -28,6 +28,11 @@ L<http://www.lua.org/manual/5.2/manual.html#7>.
 require 'Test.More'
 
 local lua = (platform and platform.lua) or arg[-1]
+local luac = (platform and platform.luac) or lua .. 'c'
+
+if not pcall(io.popen, lua .. [[ -e "a=1"]]) then
+    skip_all "io.popen not supported"
+end
 
 plan(28)
 diag(lua)
@@ -49,22 +54,25 @@ like(f:read'*l', "^[^:]+: cannot open no_file.lua", "no file")
 f:close()
 
 if arg[-1] == 'luajit' then
-    skip("LuaJIT intentional. cannot load Lua bytecode", 3)
+    os.execute(lua .. " -b hello.lua hello.luac")
 else
-    os.execute(lua .. "c -s -o hello.luac hello.lua")
-    cmd = lua .. " hello.luac"
-    f = io.popen(cmd)
-    is(f:read'*l', 'Hello World', "bytecode")
-    f:close()
+    os.execute(luac .. " -s -o hello.luac hello.lua")
+end
+cmd = lua .. " hello.luac"
+f = io.popen(cmd)
+is(f:read'*l', 'Hello World', "bytecode")
+f:close()
+os.remove('hello.luac') -- clean up
 
-    os.execute(lua .. "c -s -o hello2.luac hello.lua hello.lua")
+if arg[-1] == 'luajit' then
+    skip("LuaJIT intentional. cannot combine sources", 2)
+else
+    os.execute(luac .. " -s -o hello2.luac hello.lua hello.lua")
     cmd = lua .. " hello2.luac"
     f = io.popen(cmd)
     is(f:read'*l', 'Hello World', "combine 1")
     is(f:read'*l', 'Hello World', "combine 2")
     f:close()
-
-    os.remove('hello.luac') -- clean up
     os.remove('hello2.luac') -- clean up
 end
 
@@ -136,9 +144,6 @@ f:close()
 
 cmd = lua .. [[ -E hello.lua 2>&1]]
 f = io.popen(cmd)
-if arg[-1] == 'luajit' then
-    todo("LuaJIT TODO.", 1)
-end
 is(f:read'*l', 'Hello World')
 f:close()
 

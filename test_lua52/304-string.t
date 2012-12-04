@@ -2,7 +2,7 @@
 --
 -- lua-TestMore : <http://fperrad.github.com/lua-TestMore/>
 --
--- Copyright (C) 2009-2011, Perrad Francois
+-- Copyright (C) 2009-2012, Perrad Francois
 --
 -- This code is licensed under the terms of the MIT/X11 license,
 -- like Lua itself.
@@ -205,7 +205,7 @@ function expand (s)
                                           return tostring(_G[n]), 1
                                      end))
 end
-like(expand("print = $print; a = $a"), "^print = function: [0]?[Xx]?[fast]*#?%x+; a = nil")
+like(expand("print = $print; a = $a"), "^print = function: [0]?[Xx]?[builtin]*#?%x+; a = nil")
 
 error_like(function () string.gsub("hello world", '(%w+)', '%2 %2') end,
            "^[^:]+:%d+: invalid capture index",
@@ -263,9 +263,6 @@ is(string.rep('ab', 3), 'ababab', "function rep")
 is(string.rep('ab', 0), '')
 is(string.rep('ab', -1), '')
 is(string.rep('', 5), '')
-if arg[-1] == 'luajit' then
-    todo("LuaJIT TODO. rep with sep", 1)
-end
 is(string.rep('ab', 3, ','), 'ab,ab,ab', "with sep")
 
 is(string.reverse('abcde'), 'edcba', "function reverse")
