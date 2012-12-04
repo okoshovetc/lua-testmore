@@ -104,16 +104,14 @@ function m:subtest (name, func)
     local child = self:child(name)
     local parent = self.data
     self.data = child.data
-    local r, msg = pcall(function ()
-                            func()
-                            if not plan_handled(self) then
-                                self:done_testing()
-                            end
-                         end)
+    local r, msg = pcall(func)
     child.data = self.data
     self.data = parent
     if not r and not child._skip_all then
-        error(msg)
+        error(msg, 0)
+    end
+    if not plan_handled(child) then
+        child:done_testing()
     end
     child:finalize()
 end
