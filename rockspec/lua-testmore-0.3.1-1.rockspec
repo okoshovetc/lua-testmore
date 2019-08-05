@@ -1,13 +1,19 @@
 package = 'lua-TestMore'
 version = '0.3.1-1'
 source = {
-    url = 'http://cloud.github.com/downloads/fperrad/lua-TestMore/lua-testmore-0.3.1.tar.gz',
-    md5 = '1f7bdf0b8d36581db71536fe528206e7',
-    dir = 'lua-TestMore-0.3.1',
+    url    = 'git://github.com/okoshovetc/lua-testmore.git',
+    branch = 'master',
 }
 description = {
     summary = "an Unit Testing Framework",
     detailed = [[
+        +-----------------------------------------------------------------+
+        |                                                                 |
+        | This is forked repo for https://github.com/LuaDist/lua-testmore |
+        | This is an attempt to fix installing via luarocks using git     |
+        |                                                                 |
+        +-----------------------------------------------------------------+
+
         lua-TestMore is a port of the Perl5 module Test::More.
 
         It uses the Test Anything Protocol as output,
@@ -23,8 +29,8 @@ description = {
 
         It supplies a Test Suite for Lua itself.
     ]],
-    homepage = 'http://fperrad.github.com/lua-TestMore/',
-    maintainer = 'Francois Perrad',
+    homepage = 'https://github.com/okoshovetc/lua-testmore.git',
+    maintainer = 'Oleg Koshovets',
     license = 'MIT/X11'
 }
 dependencies = {
@@ -39,5 +45,4 @@ build = {
         ['Test.Builder.Tester.File']    = 'src/Test/Builder/Tester/File.lua',
         ['Test.More']                   = 'src/Test/More.lua',
     },
-    copy_directories = { 'doc', 'test', 'test_lua51', 'test_lua52' },
 }
